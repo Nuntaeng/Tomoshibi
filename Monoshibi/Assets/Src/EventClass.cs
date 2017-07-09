@@ -388,7 +388,7 @@ public class EventClass : MonoBehaviour {
             case EventIndex.EVENT_FUNC_PLAY3DSOUNDEFFECT:
                 {
                     Vector2 pos = new Vector3(float.Parse(text[1]), float.Parse(text[2]));
-                    manager.func.Play3DSound(pos, text[3]);
+                    manager.func.Play3DSound(manager.speaker, pos, text[3]);
                     break;
                 }
 

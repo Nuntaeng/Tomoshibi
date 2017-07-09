@@ -66,6 +66,7 @@ public class EventManager : MonoBehaviour {
     public GameObject player;
     public GameObject map;
     public GameObject lightManager;
+    public Speaker speaker;
     public Text textWindowBottom;
     public Text textWindowCenter;
     public Text textWindowTop;

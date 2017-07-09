@@ -4,7 +4,7 @@ check,41,46;
 
 
 size 6;
-play3DSE,5760,-5760,JOHN CENA ALARM;
+play3DSE,5760,-5760,nechi001;
 setTextDest,center;
 setText,1,ろうそく　を　てにいれた　！！;
 setPlayerLight,1;

@@ -9,7 +9,6 @@ public class EventFunctions : MonoBehaviour {
 
 
     //ゲーム内イベント用関数群、早い話がRPGツクールのアレ
-    public Speaker speaker;
 
 
 
@@ -203,7 +202,7 @@ public class EventFunctions : MonoBehaviour {
         }
     }
 
-    public void Play3DSound(Vector2 pos, string name) {
+    public void Play3DSound(Speaker speaker, Vector2 pos, string name) {
         speaker.transform.localPosition = pos;
         speaker.PlayEffect(name);
         Debug.Log("Play! : " + name);

@@ -2564,7 +2564,7 @@ AudioSource:
   MinDistance: 0
   MaxDistance: 1000
   Pan2D: 0
-  rolloffMode: 1
+  rolloffMode: 0
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -2591,7 +2591,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 1
+      value: 0.5
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -3050,6 +3050,7 @@ MonoBehaviour:
   player: {fileID: 1448699248}
   map: {fileID: 398357088}
   lightManager: {fileID: 1607141624}
+  speaker: {fileID: 1688745348}
   textWindowBottom: {fileID: 1034507285}
   textWindowCenter: {fileID: 1063841665}
   textWindowTop: {fileID: 1810890868}
@@ -3077,7 +3078,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddd6e4ba584bdb84a951c94f480a888c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speaker: {fileID: 1688745348}
 --- !u!1 &1917728538
 GameObject:
   m_ObjectHideFlags: 0
