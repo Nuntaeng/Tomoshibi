@@ -1,0 +1,10 @@
+size 2;
+once,0;
+position,43,34;
+
+size 4;
+playerMove,up,0,1;
+wait,60;
+playerMove,down,0,1;
+wait,60;
+end:
