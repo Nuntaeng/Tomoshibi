@@ -6,7 +6,7 @@ using UnityEngine;
 //追跡型エネミー挙動
 public class EnemyChase : MonoBehaviour {
     //親に位置するエネミー管理クラス
-    NPCClass enemyClass;
+    EnemyObjectClass enemyClass;
 
     //ステータス
     NPCStatus status;
@@ -15,11 +15,12 @@ public class EnemyChase : MonoBehaviour {
     int maxX, maxY;
     //目的地
     int destX, destY;
-    //マップ上での自身の初期位置
-    int firstX, firstY;
 
     //次に進む方向
     Vector2 direction;
+    //前回進んだ方向
+    Vector2 prevDir;
+
     //クラス内での経過時間を保存しておく
     public int classtimer;
 
@@ -28,19 +29,21 @@ public class EnemyChase : MonoBehaviour {
     int[,] map;
 
     //プレイヤー情報
-    UnityEngine.GameObject player;
+    PlayerStatus playerStatus;
+
+    //カウント
+    int classCount;
 
 
-
-    void Start()
+    public void Initialize()
     {
         status = this.GetComponent<NPCStatus>();
-        enemyClass = this.transform.parent.GetComponent<NPCClass>();
-        mapClass = enemyClass.mapObj.GetComponent<MapScript>();
-        player = enemyClass.player;
+        enemyClass = this.transform.GetComponent<EnemyObjectClass>();
+        mapClass = enemyClass.map.GetComponent<MapScript>();
+        playerStatus = enemyClass.status;
 
-        status.posX = enemyClass.NPC[status.index].posX;
-        status.posY = enemyClass.NPC[status.index].posY;
+        status.posX = enemyClass.posX;
+        status.posY = enemyClass.posY;
 
 
         this.transform.position = new Vector3((float)(status.posX * 128), (float)(status.posY * -128), 1);
@@ -50,15 +53,15 @@ public class EnemyChase : MonoBehaviour {
         map = mapClass.GetMap();
         maxX = map.GetLength(1) - 1;
         maxY = map.GetLength(0) - 1;
-        firstX = status.posX;
-        firstY = status.posY;
         status.state = PlayerState.Idle;
+        classCount = 0;
     }
 
     void Update()
     {
         MoveForDest();
         this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.y / 128.0f);
+
     }
 
 
@@ -69,58 +72,78 @@ public class EnemyChase : MonoBehaviour {
         int posY = status.posY;
         int speed = status.speed;
 
-            if (classtimer == 0)
-            {
+        if (classtimer == 0)
+        {
+            classtimer = 128;
 
             //移動が終わったら上下左右のマップデータを判定
-            switch (status.state)
+            switch (playerStatus.state)
             {
                 //プレイヤーを感知しているときはプレイヤーの位置を目的地に
                 case PlayerState.Active:
-                    destX = (int)((player.transform.position.x + 64.0f) / 128.0f);
-                    destY = (int)((-player.transform.position.y + 64.0f) / 128.0f);
-                    speed = 5;
+                    destX = playerStatus.posX;
+                    destY = playerStatus.posY;
                     break;
-                //プレイヤーが発見されていないときは追跡前の位置に戻ろうとする
-                case PlayerState.Idle:
-                    destX = firstX;
-                    destY = firstY;
-                    speed = 2;
-                    break;
-                //プレイヤーを見失うと壁に当たるまで直進
-                case PlayerState.Hiding:
-                    destX += (int)direction.x;
-                    destY -= (int)direction.y;
-                    if(direction.x == 0 && direction.y == 0)
-                    {
-                        status.state = PlayerState.Idle;
-                    }
-                    break;
-            }
-
-            direction = ChaseDest(direction, destX, destY);
-                this.transform.position = new Vector3((float)(posX * 128), (float)(posY * -128), 1);
-                classtimer = 128;
-            }
-            else
-            {
-                //distance分だけ移動
-                this.transform.localPosition += new Vector3(direction.x, direction.y, 0) * speed;
-                classtimer -= speed;
-                if (classtimer <= 0)
-                {
-                    posX += (int)direction.x;
-                    posY -= (int)direction.y;
+                //プレイヤーが通常時以外なら動かない
+                default:
+                    destX = posX;
+                    destY = posY;
                     classtimer = 0;
-                }
+                    break;
+            }
+            direction = ChaseDest(direction, destX, destY);
+
+        }
+        else if (Mathf.Abs(destX - posX) > 2 || Mathf.Abs(destY - posY) > 2)
+        {
+            //distance分だけ移動
+            this.transform.localPosition += new Vector3(direction.x, direction.y, 0) * (speed + 1);
+            classtimer -= speed;
+            if (classtimer <= 0)
+            {
+                posX = (int)(this.transform.position.x / 128.0f);
+                posY = (int)(-this.transform.position.y / 128.0f);
+                classtimer = 0;
             }
 
+        }
+        else
+        {
+            //近くのマスにいるときはマス座標を無視して襲い掛かる（移動方向は2秒ごとに更新）
+
+
+            if (classCount == 0)
+            {
+                prevDir = new Vector2(playerStatus.transform.position.x - this.transform.position.x, playerStatus.transform.position.y - this.transform.position.y);
+                prevDir = prevDir.normalized * speed;
+            }
+            ++classCount;
+            if(classCount > 120)
+            {
+                classCount = 0;
+            }
+
+            this.transform.localPosition += new Vector3(prevDir.x, prevDir.y, 0);
+            posX = (int)(this.transform.position.x / 128.0f);
+            posY = (int)(-this.transform.position.y / 128.0f);
+
+            //遠ざかったらもう一回追尾判定する
+            if (Mathf.Abs(destX - posX) > 2 || Mathf.Abs(destY - posY) > 2)
+            {
+                classtimer = 0;
+                classCount = 0;
+            }
+
+        }
+
+
+        //ステータスの変更は最後にまとめて変数に収める
         status.posX = posX;
         status.posY = posY;
         status.speed = speed;
     }
 
-    //壁を判定しつつ目的地に進んでみる
+    //目的地に進んでみる
     Vector2 ChaseDest(Vector2 prevDir, int nDestX, int nDestY)
     {
         int posX = status.posX;
@@ -142,20 +165,6 @@ public class EnemyChase : MonoBehaviour {
         if (nDestY < posY)
         {
             direction.y = 1.0f;
-        }
-
-        //壁判定わからん、とりあえず０番が壁ってことしとこう
-        if(map[posY - (int)direction.y, posX] == 0)
-        {
-            direction.y = 0.0f;
-        }
-        if (map[posY, posX + (int)direction.x] == 0)
-        {
-            direction.x = 0.0f;
-        }
-        if (map[posY - (int)direction.y, posX + (int)direction.x] == 0)
-        {
-            direction.x = 0.0f;
         }
 
         //現在地と目的地が一致したときは移動しない

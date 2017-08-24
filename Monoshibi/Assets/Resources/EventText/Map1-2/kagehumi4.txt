@@ -1,0 +1,12 @@
+﻿size 4;
+flag,152,1;
+position,8,18;
+once,0;
+nonIdle;
+
+size 3;
+changeImage,2,16,MapChip24;
+setFlag,153,1;
+changeImage,8,18,MapChip01;
+
+end;

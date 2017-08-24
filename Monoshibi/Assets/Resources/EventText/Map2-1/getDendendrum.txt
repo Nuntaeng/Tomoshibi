@@ -1,0 +1,11 @@
+﻿size 2;
+
+size ;
+setTextColor,1,1,1,1;
+setText,10,ほら　見て……この子、笑ったわ;
+setText,10,ふふ、これがお気に入りなのかしら;
+setText,10,かわいいわね……;
+wait,5;
+
+
+end;

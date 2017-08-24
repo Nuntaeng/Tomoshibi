@@ -140,12 +140,12 @@ public class EventFunctions : MonoBehaviour {
         name = name.Replace("\n", "");
         string path = "Prehubs/" + name;
         GameObject prefab = (GameObject)Resources.Load(path, typeof(GameObject));
-        Debug.Log(path);
         //プレハブが見つからなかったらそのまま帰っていただく
         if (prefab == null)
         {
             return obj;
         }
+        Debug.Log(path);
 
         //インスタンスの生成に成功した場合は引数のインスタンスを破棄して代わりに生成したインスタンスを返す
         GameObject clone = Instantiate(prefab, obj.transform.position, Quaternion.identity);
@@ -154,6 +154,7 @@ public class EventFunctions : MonoBehaviour {
             return obj;
         }
 
+
         clone.transform.parent = obj.transform.parent;
         Destroy(obj);
 
@@ -161,7 +162,7 @@ public class EventFunctions : MonoBehaviour {
     }
 
     //テキストを出す
-    public IEnumerator SetTextWindow(UnityAction<bool> result, int wait, string text, UnityEngine.UI.Text textWindow, GameObject obj)
+    public IEnumerator SetTextWindow(UnityAction<bool> result, float wait, string text, UnityEngine.UI.Text textWindow, GameObject obj)
     {
         result(true);
         Animator animator = obj.GetComponent<Animator>();
@@ -171,8 +172,8 @@ public class EventFunctions : MonoBehaviour {
         for (int i = 0; i < text.Length; ++i)
         {
             textWindow.text = text.Substring(0, i + 1);
-            Debug.Log(i);
-            yield return new WaitForSeconds((float)wait / 60.0f);
+            //Debug.Log(i);
+            yield return new WaitForSeconds(wait / 60.0f);
         }
 
         while(!Input.GetButtonDown("Fire1")){
@@ -202,10 +203,50 @@ public class EventFunctions : MonoBehaviour {
         }
     }
 
-    public void Play3DSound(Speaker speaker, Vector2 pos, string name) {
+    public void Play3DSound(Speaker speaker, Vector2 pos, float volume, string name) {
         speaker.transform.localPosition = pos;
+        speaker.mySource.volume = volume;
         speaker.PlayEffect(name);
         Debug.Log("Play! : " + name);
+    }
+
+
+    // BGM方のコード
+    public void SoundFadeIn(AudioSource src, int time) {
+        src.volume = 0f;
+        StartCoroutine(SFadeIn(src, time));
+    }
+
+    public void SoundFadeOut(AudioSource src, int time) {
+        src.volume = 1f;
+        StartCoroutine(SFadeOut(src, time));
+    }
+
+    public void SoundChagne(AudioSource src, AudioClip clip, int time) {
+        src.volume = 1f;
+        StartCoroutine(SChange(src, clip, time));
+    }
+
+    IEnumerator SFadeIn(AudioSource src, int time) {
+        for (int i = 1; i <= time; ++i)
+        {
+            src.volume = (float)i / (float)time;
+            yield return null;
+        }
+    }
+    IEnumerator SFadeOut(AudioSource src, int time) {
+        for (int i = 1; i <= time; ++i)
+        {
+            src.volume = 1f - (float)i / (float)time;
+            yield return null;
+        }
+        src.Stop();
+    }
+    IEnumerator SChange(AudioSource src, AudioClip clip, int time) {
+        yield return StartCoroutine(SFadeOut(src, time));
+        src.clip = clip;
+        src.Play();
+        yield return StartCoroutine(SFadeIn(src, time));
     }
 }
 

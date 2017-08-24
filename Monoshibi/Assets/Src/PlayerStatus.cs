@@ -12,7 +12,10 @@ public class PlayerStatus : MonoBehaviour {
     public float moveSpeed;
     public float maxLightPower;
     public float lightPower;
-    public float ditectPoint;
+    //感知度と感知カウント
+    public float detectPoint;
+    public int detectCount;
+
     public int posX, posY;
     public Vector2 direction;
     public Vector2 checkPos;

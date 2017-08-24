@@ -2,10 +2,19 @@
 using System.Xml;
 using UnityEngine;
 
-public class MapScriptTMX : MonoBehaviour {
-
+[System.Serializable]
+public class MapChip
+{
     public GameObject[] mapChips;
-    public string stageAddr;
+}
+
+
+public class MapScriptTMX : MonoBehaviour {
+    public int mapNumber;
+    public string[] stageAddr;
+    public MapChip[] mapChipsArray;
+    [HideInInspector]
+    public int usedMapIndex;
 
     int[,] map;
     GameObject[,] mapObject;
@@ -32,8 +41,19 @@ public class MapScriptTMX : MonoBehaviour {
         get { return mapHeight; }
     }
 
+    void Awake() {
+        if(SystemInfo.operatingSystem.Contains("Mac OS X")) {
+            Debug.Log("OS X Detected, Change Path...");
+            for(int i = 0; i < stageAddr.Length; ++i) {
+                stageAddr[i] = stageAddr[i].Replace('\\', '/');
+                Debug.Log(stageAddr[i]);
+            }
+        }
+            
+    }
+
     public void LoadMapFromTMXFile() {
-        XmlReader xml = XmlReader.Create(stageAddr);
+        XmlReader xml = XmlReader.Create(stageAddr[mapNumber]);
         while (xml.Read()) {
 
             // マップの大きさをファイルから読み取る
@@ -68,7 +88,7 @@ public class MapScriptTMX : MonoBehaviour {
         for (int y = 0; y < mapHeight; ++y) 
             for (int x = 0; x < mapWidth; ++x)
             {
-                mapObject[y, x] = Instantiate(mapChips[map[y, x]], 
+                mapObject[y, x] = Instantiate(mapChipsArray[usedMapIndex].mapChips[map[y, x]], 
                     new Vector3((float)(x * 128), (float)(y * -128), -y + 1),
                     Quaternion.identity);
                 mapObject[y, x].transform.parent = this.transform;
@@ -82,14 +102,5 @@ public class MapScriptTMX : MonoBehaviour {
     public void ClearMap() {
         for (int i = 0; i < this.transform.childCount; ++i)
             Destroy(this.transform.GetChild(i).gameObject);
-    }
-
-
-
-    // ---------------------------------------------------
-    private void Awake()
-    {
-        LoadMapFromTMXFile();
-        PrintCurrentMap();
     }
 }

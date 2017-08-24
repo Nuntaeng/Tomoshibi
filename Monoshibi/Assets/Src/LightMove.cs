@@ -14,10 +14,14 @@ public class LightMove : MonoBehaviour {
     }
 
     void FixedUpdate () {
+        //変数名思いつかなかったので名前は超適当、感知時の演出用変数
+        float detect = 0.0f;
+
         time += 0.05f;
-        if(status.ditectPoint >= 0.8f)
+        if(status.detectPoint >= 0.6f)
         {
-            time += (status.ditectPoint - 0.8f) * 2.0f;
+            detect = 1.6f;
+            time += 0.15f;
         }
 
         //向きを参考に光の位置を調整
@@ -25,7 +29,7 @@ public class LightMove : MonoBehaviour {
         //揺らめくみたいに移動させる
         this.transform.localPosition += new Vector3(Mathf.Cos(time) * 0.05f ,Mathf.Sin(time) * 0.05f, 0.0f);
         //光の明るさをセット
-        float scale = status.lightPower + (Mathf.Sin(time) - 1) * 0.4f + 80.0f;
+        float scale = status.lightPower + (Mathf.Sin(time) - 1) * (0.4f + detect) + 80.0f;
 
         scale *= 0.01f;
 
@@ -45,7 +49,11 @@ public class LightMove : MonoBehaviour {
         //死んでるときはライトを消す
         if (status.state != PlayerState.Dead)
         {
-            SetIntencity(status.lightPower -= 0.001f);
+            //イベント中は光が弱くならない
+            if (status.state != PlayerState.Idle)
+            {
+                SetIntencity(status.lightPower -= 0.001f);
+            }
         }
         else
         {

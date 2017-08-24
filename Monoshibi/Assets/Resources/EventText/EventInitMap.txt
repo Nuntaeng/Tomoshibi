@@ -1,7 +1,0 @@
-size 1;
-once,0;
-
-size 2;
-changeImage,44,42,MapChip00;
-setPlayerLight,0;
-end;

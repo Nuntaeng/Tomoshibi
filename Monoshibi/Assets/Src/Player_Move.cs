@@ -39,8 +39,10 @@ public class Player_Move : MonoBehaviour {
             status.posX = (int)((this.transform.position.x) / 128.0f);
             status.posY = (int)((this.transform.position.y) / -128.0f);
             this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, (this.transform.position.y + 64.0f) / 128.0f);
+            //Debug.Log("Idle");
             return;
         }
+
 
         //プレイヤーの向きをセット
         if (moveX != 0.0f || moveY != 0.0f)
@@ -83,4 +85,14 @@ public class Player_Move : MonoBehaviour {
         status.posX = (int)((this.transform.position.x + 64.0f) / 128.0f);
         status.posY = (int)((this.transform.position.y - 64.0f) / -128.0f);
     }
+
+
+    //面倒くさいからとりあえずここに書いとく
+    public void WalkEffect(string name)
+    {
+        SEManager.Instance.SetVolume(0.6f);
+        SEManager.Instance.PlaySE(name);
+    } 
 }
+
+

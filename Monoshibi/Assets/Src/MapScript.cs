@@ -6,7 +6,7 @@ using UnityEngine;
 public class MapScript : MonoBehaviour
 {
     public GameObject prehub_Item;
-    public Transform playerTrans;
+    public int[] useMapChip;
     MapScriptTMX tmxLoader;
 
 
@@ -18,10 +18,12 @@ public class MapScript : MonoBehaviour
     {
         tmxLoader = GetComponent<MapScriptTMX>();
         
-        map1 = tmxLoader.Map;
-        obj = tmxLoader.MapObject;
-        int maxX = tmxLoader.MapWidth;
-        int maxY = tmxLoader.MapHeight;
+        ChangeMap(tmxLoader.mapNumber);
+
+        // map1 = tmxLoader.Map;
+        // obj = tmxLoader.MapObject;
+        // int maxX = tmxLoader.MapWidth;
+        // int maxY = tmxLoader.MapHeight;
 
         // Test
         //map2 = generator.GetGeneratedMap();
@@ -74,6 +76,20 @@ public class MapScript : MonoBehaviour
 
 
 
+    }
+
+    
+    public void ChangeMap(int mapNumber) {
+        tmxLoader.ClearMap();
+        tmxLoader.mapNumber = mapNumber;
+        tmxLoader.usedMapIndex = useMapChip[mapNumber];
+        tmxLoader.LoadMapFromTMXFile();
+        tmxLoader.PrintCurrentMap();
+
+        map1 = tmxLoader.Map;
+        obj = tmxLoader.MapObject;
+        int maxX = tmxLoader.MapWidth;
+        int maxY = tmxLoader.MapHeight;
     }
 
     private void NewMethod(int randX, int randY)

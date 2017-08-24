@@ -19,6 +19,7 @@ public class itemtext : MonoBehaviour
     public GameObject im;
     public GameObject g_itemtext;
     public GameObject itemdatabase;
+    public GameObject textboxhit;
     void Start()
     {
         ItemManager m = im.GetComponent<ItemManager>();
@@ -42,7 +43,7 @@ public class itemtext : MonoBehaviour
             if (texttime >= 120.0f)
             {
                 hit_item = false;
-                GameObject textboxhit = GameObject.Find("textbox");
+               
                 textboxflag flag = textboxhit.GetComponent<textboxflag>();
                 flag.hit_item(hit_item);
                 Text t = GetComponent<Text>();

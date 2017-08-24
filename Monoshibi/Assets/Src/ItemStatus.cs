@@ -7,19 +7,21 @@ public class ItemStatus : MonoBehaviour
 {
     public string itemName;        //名前
     public int itemID;             //アイテムID
-    public Texture2D itemIcon;     //アイコン
+    public Sprite itemIcon;     //アイコン
     public int itemon_hand;       //アイテムの手持ち数
     public int itemType;      //アイテムの種類
     public string itemDesc;        //アイテムの説明文
     public float item_x, item_y;  //アイテム座標
+    public string itemicon; //アイテムアイコン名
     
     //ここでリスト化時に渡す引数をあてがいます   
-    public ItemStatus(string name, int id, int hand, string desc,float x,float y,int type)
+    public ItemStatus(string name, int id, int hand, string desc,float x,float y,int type,string icon)
     {
         itemName = name;
         itemID = id;
         //アイコンはnameとイコールにするのでアイコンがあるパス＋nameで取ってきます    
-        itemIcon = Resources.Load<Texture2D>("Item Icons/" + name);
+        //itemIcon = Resources.Load<Sprite>(icon);
+        itemIcon = Resources.Load<Sprite>("Sprite/" + icon);
         itemType = type;
         itemon_hand = hand;
         itemDesc = desc;

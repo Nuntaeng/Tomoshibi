@@ -36,7 +36,6 @@ public class PlayerCheck : MonoBehaviour {
         {
             return;
         }
-
         
         //開く
         if (collision.gameObject.tag == "Door")
@@ -48,24 +47,42 @@ public class PlayerCheck : MonoBehaviour {
         {
             textbox.text = "Ctl:調べる";
         }
+        //隠れる
+        if (collision.gameObject.tag == "HidingSpace")
+        {
+            textbox.text = "Ctl:隠れる";
+        }
 
         //調べるボタンが押されたときに判定に仕事してもらう
-        if (!Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1"))
         {
-            return;
+            //ドアはイベントじゃなくてタグで感知、だってこっちのが楽だもん！
+            if (collision.gameObject.tag == "Door")
+            {
+                collision.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                collision.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+                SEManager.Instance.PlaySE("Sliding door");
+                textbox.text = "";
+            }
+            //イベントのオブジェクトさん、調べたフラグと共に座標をセット
+            if (collision.gameObject.tag == "MapObject")
+            {
+                status.checkPos = new Vector2(collision.gameObject.transform.position.x / 128.0f, collision.gameObject.transform.position.y / -128.0f);
+                textbox.text = "";
+            }
         }
-
-        //ドアはイベントじゃなくてタグで感知、だってこっちのが楽だもん！
-        if(collision.gameObject.tag == "Door")
-        {           
-            collision.gameObject.SetActive(false);
-            textbox.text = "";
-        }
-        //イベントのオブジェクトさん、調べたフラグと共に座標をセット
-        if (collision.gameObject.tag == "MapObject")
+        //隠れるにはボタンを押し続ける
+        if (Input.GetButton("Fire1"))
         {
-            status.checkPos = new Vector2(collision.gameObject.transform.position.x / 128.0f, collision.gameObject.transform.position.y / -128.0f);
-            textbox.text = "";
+            if (collision.gameObject.tag == "HidingSpace")
+            {
+                textbox.text = "";
+                status.detectCount -= 10;
+                if(status.detectCount < 0)
+                {
+                    status.detectCount = 0;
+                }
+            }
         }
     }
 }

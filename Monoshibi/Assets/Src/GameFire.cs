@@ -8,7 +8,9 @@ public class GameFire : MonoBehaviour {
     float alfa;    //A値を操作するための変数
     float red, green, blue;    //RGBを操作するための変数
     public Texture2D fire_position;
-
+    public GameObject iti;
+    PlayerStatus lightmove;
+    public float candle_move;
     // Use this for initialization
     void Start () {
         alfa = 1.0f;
@@ -19,11 +21,12 @@ public class GameFire : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        Vector3 pos = transform.position;
-        if (pos.y <= 100)
+        lightmove = iti.GetComponent<PlayerStatus>();
+        candle_move = lightmove.lightPower;
+        if (candle_move<0.0f)
         {
-            GetComponent<Image>().color = new Color(red, green, blue, alfa);
             alfa = 0;
+            GetComponent<Image>().color = new Color(red, green, blue, alfa);            
         }
 	}
 }

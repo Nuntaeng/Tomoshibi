@@ -9,10 +9,11 @@ public class itemcandle : MonoBehaviour
     public bool hit_item = false;
 
     public ItemData[] itemdata;
-
-    void Awake()
+    public ItemManager itemmanager;
+    
+    void Start()
     {
-
+        
     }
     void OnTriggerStay2D(Collider2D hit)
     {

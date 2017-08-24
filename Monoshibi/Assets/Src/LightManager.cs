@@ -57,6 +57,7 @@ public class LightManager : MonoBehaviour
 
         GameObject lightObj = lightData[index].GetObj();
         lightObj.transform.localScale = new Vector3(size * 128.0f, size * 128.0f, 1.0f);
+        lightObj.transform.localPosition = new Vector3(x * 128.0f, -y * 128.0f);
         lightObj.transform.GetChild(0).GetComponent<SpriteRenderer>().color = color;
         lightObj.transform.GetChild(1).GetComponent<SpriteRenderer>().color = color2;
     }

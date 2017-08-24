@@ -7,7 +7,7 @@ public class HitCheck : MonoBehaviour {
     PlayerStatus player;
 
 	void Start () {
-        //もっとうまい取得方法はないんでしょうかね、たぶんこれが一番うまいと思います
+        //コンポーネントを取得
         player = this.transform.parent.GetComponent<PlayerStatus>();
 	}
 	
@@ -18,42 +18,18 @@ public class HitCheck : MonoBehaviour {
     //衝突
     private void OnTriggerStay2D(Collider2D collision)
     {
-        //衝突
-
-
         //敵に捕まった
-        //if (collision.gameObject.tag == "Player")
-        //{
-        //    StartCoroutine(DelayProcess());
-        //}
-
-
-        if (player.state != PlayerState.Dead)
+        if (collision.gameObject.tag == "Enemy")
         {
-            //隠れる場所に入った
-            if (collision.gameObject.tag == "HidingSpace")
-            {
-                player.state = PlayerState.Hiding;
-            }
+            StartCoroutine(DelayProcess());
         }
-    }
 
-    //衝突の終了時
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (player.state != PlayerState.Dead)
-        {
-            //隠れる場所から出た
-            if (collision.gameObject.tag == "HidingSpace")
-            {
-                player.state = PlayerState.Idle;
-            }
-        }
     }
 
     private IEnumerator DelayProcess()
     {
         player.state = PlayerState.Dead;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(2.0f);
+
     }
 }

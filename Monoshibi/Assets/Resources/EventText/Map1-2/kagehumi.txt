@@ -1,0 +1,10 @@
+﻿size 3;
+flag,1,1;
+once,0;
+nonIdle:
+
+size 2;
+changeImage,5,13,MapChip24;
+setFlag,150,1;
+
+end;

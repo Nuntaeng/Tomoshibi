@@ -1,0 +1,16 @@
+﻿size 2;
+once,0;
+check,41,46;
+
+
+size 9;
+play3DSE,5760,-5760,nechi001,1.0;
+setTextDest,under;
+setTextColor, 1.0, 1.0, 1.0, 1.0;
+setText,5,ろうそくを手に入れた;
+setPlayerLight,1;
+setLight,0,41,46,0, 0,0,0,0, 0,0,0,0;
+changeImage,44,42,MapChip05;
+setFlag,0,1;
+itemget,1;
+end;

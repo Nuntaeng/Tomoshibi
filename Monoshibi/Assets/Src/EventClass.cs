@@ -17,31 +17,46 @@ using UnityEngine.UI;
     条件：
 
     size 1                                  サイズ指定は一番初めに書く、この直後の文を配列にぶち込んでいるので変に改行しないこと
+    nonIdle                                 引数なし、この条件を指定したイベントはプレイヤーが動き続けられる
     position, x, y                          プレイヤーの座標が指定した位置にある（引数は座標XY）
     flag, index, 0or1                       特定のフラグが立っているとき/立っていないとき (引数はフラグの番号、boolの真偽で０をfalseとし、１をtrueとする)
     once, count                             このイベントの起こった回数が一定回数以下のとき（基本的には０を指定して一回だけイベントを起こすように使う）
     check, x, y                             指定した座標のマップオブジェクトを調べたとき(あたり判定のないものは今は調べられない);
+    *item, index, count                      指定したIDのアイテムをcount分持っているかどうか
  
 
     処理：
 
     size 2                                                          サイズ指定は一番初めに書く、この直後の文を配列にぶち込んでいるので変に改行しないこと
-    setFlag, setIndex, set                                          指定したフラグを立てたり折ったりする、０がfalseで１がtrue
+    setFlag, setIndex, bool                                         指定したフラグを立てたり折ったりする、０がfalseで１がtrue
     playerMove, direction, distance, speed                          「プレイヤー」を指定方向へ移動させる（directionはup,down,left,rightの四つ）
+    setPlayerPos, posX, poyY                                        「プレイヤー」を指定座標（マス単位）へ移動させる。なおアニメーションはなく瞬間移動なのに注意されたし
     playerCenter                                                    引数なし、プレイヤーをマスの中心へ移動させる
     wait, time                                                      指定したフレーム数イベント処理を待つ
     changeImage, x, y, name                                         指定したマップ座標のオブジェクトをnameのプレハブと入れ替える
-   *setTextDest, position                                           テキストの表示位置の指定、同一イベント内でのみ有効（位置はtop,center,bottomの三つ）
+    setTextDest, position                                           テキストの表示位置の指定、同一イベント内でのみ有効（位置はtop,center,bottomの三つ）
+    setTextColor, r, g, b, a                                        テキストの色を指定、値は０から１までの小数で指定する点に注意。floatを示すfはつけなくていいよん。
     setText, speed, string                                          setTextDist処理で指定した位置にstringの文字列をwaitをかけつつ表示、位置の初期値は下
     setLight, index, x, y, size, R1, G1, B1, A1, R2, G2, B2, A1     index番目の光の、位置、色、サイズを変更、色は透明度含む二色
     setPlayerLight, enable                                          ほとんどオープニング用、ろうそくをつけたり消したりする
-    playSE, name                                                    効果音を鳴らす。
-    Play3DSE, x, y, name                                            ３D効果音を鳴らす。音源位置調整もできる
-    
+    playSE, name, volume                                            効果音を鳴らす。ボリューム値は省略できる
+    Play3DSE, x, y, name, volume                                    ３D効果音を鳴らす。音源位置調整もできるし音の大きさまで設定できる。ボリュームは省略できる。
+    itemget,itemID                                                  アイテムを手に入れる。アイコンをUIに表示。
+    itemlost,itemID                                                 アイテムを使う。アイコンUIを消して詰める。
+
+    createEnemy, detected                                           エネミーを有効化／無効化する
+    setEnemyMaxDetect, maxDetect                                    エネミーの最大感知度を設定、エネミーは最大感知度を現在の感知度が上回ると出現するのだ
+    fadeIn, time                                                    タイムの速度でフェードイン
+    fadeOut, time                                                   タイムの速度でフェードアウト
+    ChangeMap,mapIndex                                              ゲームの実行中にマップを変更する
+    BGMStart, type, time, name                                      BGM切り替え、timeの値でフェードする。　タイプでBGMなのか、DetectSEなのか、ChaseSEなのかを入力してください。
+    BGMStop, type, time                                             BGMストップ、timeの値でフェードする。　タイプでBGMなのか、DetectSEなのか、ChaseSEなのかを入力してください。
+    BGMChange, type, time, name                                     BGMを切り替えてフェードイン＆アウトします。　タイプでBGMなのか、DetectSEなのか、ChaseSEなのかを入力してください。
+
     end:                                                            テキストの末尾には"end"と書く、ぶっちゃけ仕様上いらないけど見やすいと思うので
 
     ※随時追加予定、忘れてたら言ってちょ
-    　新規追加処理には今度から*をつけとく、今後の参考にでもしておくれなんし
+    　新規追加処理には今度から * をつけとく、今後の参考にでもしておくれなんし
  */
 
 
@@ -57,11 +72,12 @@ public class EventClass : MonoBehaviour {
     public EventManager manager;
     public TextAsset eventTxtFile;
 
-
     //このイベントがマネージャーの管理する何番目のイベントかを保持、主にマネージャーに情報を返すために使う
     [HideInInspector]
     public int eventNumber;
 
+    //マップ切り替え時は処理をちょっと変える
+    bool isChangeMap = false;
 
     //イベントの条件と処理内容
     string[] eventCheck;
@@ -79,10 +95,12 @@ public class EventClass : MonoBehaviour {
     //イベントの進行度
     int eventCount = 0;
 
-    //文字の表示位置
+    //文字の表示位置と色
     Text textDest;
+    Color textColor;
 
 
+    
     
     public void Initialize()
     {
@@ -90,12 +108,19 @@ public class EventClass : MonoBehaviour {
         ReadEventText(ref eventCheck, ref eventText);
         SetCheckData();
         textDest = manager.textWindowBottom;
+        textColor = new Color(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
-    void Update()
+    public void Run()
     {
+        //Enableがfalseならイベントを無効にできる
+        if (!manager.eventStatus[eventNumber].eventEnable || (manager.eventState != eventNumber && manager.eventState >= 0))
+        {
+            return;
+        }
+
         //ずっと判定垂れ流すって実際どうなんでしょう、処理的に
-        if ((eventCount > 0 || CheckEventEnter()) && !eventState && eventText != null && eventText.Length > 0)
+        if (((eventCount > 0 || CheckEventEnter()) && !eventState && eventText != null && eventText.Length > 0))
         {
             //アニメーションを止める（正確には待機アニメーションへ移行）
             Animator animator = manager.player.GetComponent<Animator>();
@@ -103,8 +128,6 @@ public class EventClass : MonoBehaviour {
             animator.SetFloat("Player_Input_X", 0.0f);
 
             textDest.text = "";
-
-
             StartEvent(eventCount);
 
             eventCount++;
@@ -114,7 +137,16 @@ public class EventClass : MonoBehaviour {
                 ++eventFlag;
             }
         }
-        manager.eventStatus[eventNumber].eventState = eventState;
+        if (!isChangeMap)
+        {
+            if (eventCount > 0 || eventState)
+            {
+                manager.eventStatus[eventNumber].eventState = true;
+            } else
+            {
+                manager.eventStatus[eventNumber].eventState = false;
+            }
+        }
     }
 
 
@@ -127,7 +159,6 @@ public class EventClass : MonoBehaviour {
         //余計な文字列を除去
         text = text.Replace("\r", "").Replace("\n", "");
         text = text.Replace(" ", "");
-        text = text.Replace("　", "");
         text = text.Replace("size", ":");
 
         string[] array = text.Split(':');
@@ -198,6 +229,13 @@ public class EventClass : MonoBehaviour {
             //インデックスによって処理を判断
             switch ((EventIndex)checkData[i][0])
             {
+                //プレイヤーを止めるイベントかどうか、イベントに入るための条件というよりはイベント情報な気もする
+                case EventIndex.EVENT_IF_IDLE:
+                    {
+                        manager.eventStatus[eventNumber].idleEvent = false;
+                        break;
+                    }
+
                 //プレイヤーの位置を判定
                 case EventIndex.EVENT_IF_POSITION:
                     if(checkData[i][1] != manager.status.posX || checkData[i][2] != manager.status.posY)
@@ -214,6 +252,14 @@ public class EventClass : MonoBehaviour {
                     }
                     break;
 
+                //アイテムを指定数持っているか
+                case EventIndex.EVENT_IF_ITEM:
+                    if(manager.itemmanager.GetComponent<ItemManager>().itemData[checkData[i][1]].itemon_hand != checkData[i][2])
+                    {
+                        return false;
+                    }
+                    break;
+
                 //このイベントが起こった回数が指定値以下
                 case EventIndex.EVENT_IF_COUNT:
                     if (eventFlag > checkData[i][1])
@@ -224,10 +270,10 @@ public class EventClass : MonoBehaviour {
 
                 //特定の座標にあるマップオブジェクトを調べたとき
                 case EventIndex.EVENT_IF_CHECK:
-                    //調べるコマンドの発生するマップチップのタグ初期化
+                    //調べるコマンドの発生するマップチップ初期化
                     checkX = checkData[i][1];
                     checkY = checkData[i][2];
-                    manager.mapObj[checkY, checkX].tag = "Untagged";
+                    //manager.mapObj[checkY, checkX].tag = "Untagged";
                     break;
 
                 //文字列がデータにないやつだったらとりあえずfalse返しとく
@@ -239,13 +285,15 @@ public class EventClass : MonoBehaviour {
         //調べるコマンドが存在して、かつ調べられる条件を満たすときにそのマスのタグをMapobjectへ
         if(checkX != -1 && checkY != -1)
         {
-
             manager.mapObj[checkY, checkX].tag = "MapObject";
+            manager.mapObj[checkY, checkX].layer = LayerMask.NameToLayer("CheckAble");
 
+            //調べたときにはマップのタグをUntaggedにする
             if (checkX != (int)manager.status.checkPos.x || checkY != (int)manager.status.checkPos.y)
             {
                 return false;
             }
+            Debug.Log("");
             manager.mapObj[checkY, checkX].tag = "Untagged";
             manager.status.checkPos = new Vector2(-100.0f, -100.0f);
         }
@@ -258,6 +306,7 @@ public class EventClass : MonoBehaviour {
     {
         string[] text = eventText[i].Split(',');
         int index = manager.keyWord[text[0]];
+
         //番号にて関数を呼び出す
         switch ((EventIndex)index)
         {
@@ -288,6 +337,19 @@ public class EventClass : MonoBehaviour {
                     StartCoroutine(manager.func.PlayerMove((r) => eventState = r, manager.player, new Vector2(x, y), distance, speed));
                     break;
                 }
+
+            //"setPlayerPos"処理
+            case EventIndex.EVENT_FUNC_PLAYERSETPOSITION:
+                {
+                    int x = int.Parse(text[1]);
+                    int y = int.Parse(text[2]);
+                    PlayerStatus status = manager.player.GetComponent<PlayerStatus>();
+                    status.posX = x;
+                    status.posY = y;
+                    manager.player.transform.position = new Vector3(status.posX * 128.0f, -status.posY * 128.0f, (status.posY - 64.0f) / 128.0f);
+                    break;
+                }
+
             //"playerCenter"処理
             case EventIndex.EVENT_FUNC_PLAYERCENTER:
                 {
@@ -324,7 +386,8 @@ public class EventClass : MonoBehaviour {
                 {
                     int x = int.Parse(text[1]);
                     int y = int.Parse(text[2]);
-
+                    //ファイルのパスを指定する（フォルダ名はMap + 階層数）
+                    text[3] = "Map" + (manager.map.GetComponent<MapScriptTMX>().usedMapIndex + 1).ToString() + "/" + text[3];
                     manager.mapObj[y, x] = manager.func.ChangeImage(manager.mapObj[y, x], text[3]);
 
                     break;
@@ -333,8 +396,8 @@ public class EventClass : MonoBehaviour {
             //"setText"処理
             case EventIndex.EVENT_FUNC_SETTEXT:
                 {
-                    int wait = int.Parse(text[1]);
-                    Debug.Log(text[2]);
+                    float wait = float.Parse(text[1]);
+                    textDest.color = textColor;
                     StartCoroutine(manager.func.SetTextWindow((r) => eventState = r, wait, text[2], textDest, manager.player));
                     break;
                 }
@@ -356,6 +419,18 @@ public class EventClass : MonoBehaviour {
                     }
                     break;
                 }
+
+            //"setColor"処理
+            case EventIndex.EVENT_FUNC_SETTEXTCOLOR:
+                {
+                    float r = float.Parse(text[1]);
+                    float g = float.Parse(text[2]);
+                    float b = float.Parse(text[3]);
+                    float a = float.Parse(text[4]);
+                    textColor = new Color(r, g, b, a);
+                    break;
+                }
+
             //"setLight"処理
             case EventIndex.EVENT_FUNC_SETLIGHT:
                 {
@@ -381,6 +456,10 @@ public class EventClass : MonoBehaviour {
             case EventIndex.EVENT_FUNC_PLAYSOUNDEFFECT:
                 {
                     Debug.Log(text[1]);
+                    if (text.Length >= 3)
+                        SEManager.Instance.SetVolume(float.Parse(text[2]));
+                    else
+                        SEManager.Instance.SetVolume(1f);
                     SEManager.Instance.PlaySE(text[1]);
                     break;
                 }
@@ -388,16 +467,129 @@ public class EventClass : MonoBehaviour {
             case EventIndex.EVENT_FUNC_PLAY3DSOUNDEFFECT:
                 {
                     Vector2 pos = new Vector3(float.Parse(text[1]), float.Parse(text[2]));
-                    manager.func.Play3DSound(manager.speaker, pos, text[3]);
+                    float vol = 1f;
+                    if (text.Length < 5)
+                        vol = float.Parse(text[4]);
+                    manager.func.Play3DSound(manager.speaker, pos, vol, text[3]);
+                    break;
+                }
+            //"itemget"処理
+            case EventIndex.EVENT_FUNC_ITEMGET:
+                {
+                    GameObject im = manager.itemmanager;
+                    ItemManager m = im.GetComponent<ItemManager>();
+                    m.itemData[int.Parse(text[1])].itemon_hand = 1;
+                    GameObject icon = manager.itembox;
+                    itemlist item_icon = icon.GetComponent<itemlist>();
+                    item_icon.itemget(int.Parse(text[1]));
+                    break;
+                }
+            //"itemlost"処理
+            case EventIndex.EVENT_FUNC_ITEMLOST:
+                {
+                    GameObject icon = manager.itembox;
+                    itemlist item_icon = icon.GetComponent<itemlist>();
+                    item_icon.itemlost(int.Parse(text[1]));
+                    break;
+                }
+
+            //"createEnemy"処理
+            case EventIndex.EVENT_FUNC_ENEMYDETECTED:
+                {
+                    if(int.Parse(text[1]) == 0)
+                    {
+                        manager.enemyClass.enable = false;
+                        manager.enemyClass.KillEnemy();
+                    }
+                    else
+                    {
+                        manager.enemyClass.enable = true;
+                    }
+                    manager.enemyClass.detectCount = 0;
+
+                    break;
+                }
+            //"setEnemyMaxDetect"処理
+            case EventIndex.EVENT_FUNC_ENEMYSETMAXDETECT:
+                {
+                    manager.enemyClass.detectMax = int.Parse(text[1]);
+                    break;
+                }
+            //"fadeIn"処理
+            case EventIndex.EVENT_FUNC_FADEIN:
+                {
+                    manager.fade.FadeIn(int.Parse(text[1]));
+                    break;
+                }
+            //"fadeOut"処理
+            case EventIndex.EVENT_FUNC_FADEOUT:
+                {
+                    manager.fade.FadeOut(int.Parse(text[1]));
+                    break;
+                }
+            //"ChangeMap"処理
+            case EventIndex.EVENT_FUNC_CHANGEMAP: 
+                {
+                    int mapNumber = int.Parse(text[1]);
+                    manager.useEventIndex = mapNumber;
+                    manager.mapLoader.ChangeMap(mapNumber);
+                    manager.EventInitialize();
+                    isChangeMap = true;
+                    break;
+                }
+            //"BGMStart"処理
+            case EventIndex.EVENT_FUNC_BGMSTART:
+                {
+                    AudioSource src = null;
+                    switch (text[1]) {
+                        case "BGM":             
+                            manager.BGM.src.clip = manager.BGM.Clips[text[3]];
+                            src = manager.BGM.src;  
+                            break;                        
+                        case "DetectSE":        
+                            manager.DetectSE.src.clip = manager.DetectSE.Clips[text[3]];
+                            src = manager.DetectSE.src;  
+                            break;                        
+                        case "ChaseSE":         
+                            manager.ChaseSE.src.clip = manager.ChaseSE.Clips[text[3]];
+                            src = manager.ChaseSE.src;  
+                            break;         
+                        default: Debug.LogError("Scripting Error on BGMSTART"); break;               
+                    }
+                    src.volume = 0f;
+                    src.Play();
+                    manager.func.SoundFadeIn(src, int.Parse(text[2]));
+
+                    break;
+                }
+                //"BGMStop"処理
+            case EventIndex.EVENT_FUNC_BGMSTOP:
+                {
+                    switch (text[1]) {
+                        case "BGM":      manager.func.SoundFadeOut(manager.BGM.src, int.Parse(text[2]));    break;                        
+                        case "DetectSE": manager.func.SoundFadeOut(manager.DetectSE.src, int.Parse(text[2]));    break;
+                        case "ChaseSE":  manager.func.SoundFadeOut(manager.ChaseSE.src, int.Parse(text[2]));    break;
+                        default: Debug.LogError("Scripting Error on BGMSTOP"); break;               
+                    }
+                    break;
+                }
+                //"BGMChange"処理
+            case EventIndex.EVENT_FUNC_BGMCHANGE:
+                {
+                    switch (text[1]) {
+                        case "BGM":         manager.func.SoundChagne(manager.BGM.src, manager.BGM.Clips[text[3]], int.Parse(text[2]));  break;                        
+                        case "DetectSE":    manager.func.SoundChagne(manager.DetectSE.src, manager.DetectSE.Clips[text[3]], int.Parse(text[2]));  break; 
+                        case "ChaseSE":     manager.func.SoundChagne(manager.ChaseSE.src, manager.ChaseSE.Clips[text[3]], int.Parse(text[2]));  break; 
+                        default: Debug.LogError("Scripting Error on BGMCHANGE"); break;               
+                    }
                     break;
                 }
 
             default:
                 return;
         }
-
     }
-
+    
 
 }
 

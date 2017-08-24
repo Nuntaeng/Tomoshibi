@@ -1,0 +1,15 @@
+size 2;
+once,0;
+position,19,34;
+
+size 9;
+playerMove,down,7,8;
+changeImage,19,42,MapChip05_Open;
+playerMove,down,2,8;
+changeImage,19,42,MapChip23;
+playerMove,down,1,8;
+wait,60;
+playerMove,up,0,1;
+wait,60;
+createEnemy, 0;
+end:

@@ -1,0 +1,93 @@
+Initialize engine version: 5.5.3f1 (4d2f809fd6f3)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce GTX 765M (ID=0x11e2)
+    Vendor:   NVIDIA
+    VRAM:     2020 MB
+    Driver:   22.21.13.8205
+Begin MonoManager ReloadAssembly
+Platform assembly: E:\Desktop\Tomoshibi\Betas_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading E:\Desktop\Tomoshibi\Betas_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: E:\Desktop\Tomoshibi\Betas_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading E:\Desktop\Tomoshibi\Betas_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: E:\Desktop\Tomoshibi\Betas_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading E:\Desktop\Tomoshibi\Betas_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: E:\Desktop\Tomoshibi\Betas_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading E:\Desktop\Tomoshibi\Betas_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: E:\Desktop\Tomoshibi\Betas_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll (this message is harmless)
+Loading E:\Desktop\Tomoshibi\Betas_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll into Unity Child Domain
+- Completed reload, in  0.304 seconds
+Platform assembly: E:\Desktop\Tomoshibi\Betas_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: E:\Desktop\Tomoshibi\Betas_Data\Managed\System.dll (this message is harmless)
+desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+Initialize engine version: 5.5.3f1 (4d2f809fd6f3)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce GTX 765M (ID=0x11e2)
+    Vendor:   NVIDIA
+    VRAM:     2020 MB
+    Driver:   22.21.13.8205
+Begin MonoManager ReloadAssembly
+Platform assembly: E:\Desktop\Tomoshibi\Betas_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading E:\Desktop\Tomoshibi\Betas_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: E:\Desktop\Tomoshibi\Betas_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading E:\Desktop\Tomoshibi\Betas_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: E:\Desktop\Tomoshibi\Betas_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading E:\Desktop\Tomoshibi\Betas_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: E:\Desktop\Tomoshibi\Betas_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading E:\Desktop\Tomoshibi\Betas_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+Platform assembly: E:\Desktop\Tomoshibi\Betas_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll (this message is harmless)
+Loading E:\Desktop\Tomoshibi\Betas_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll into Unity Child Domain
+- Completed reload, in  0.084 seconds
+Platform assembly: E:\Desktop\Tomoshibi\Betas_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: E:\Desktop\Tomoshibi\Betas_Data\Managed\System.dll (this message is harmless)
+desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 7.274886 ms
+The referenced script on this Behaviour (Game Object 'itemboxs') is missing!
+ 
+(Filename:  Line: 1754)
+
+Unloading 6 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 9.931943 ms
+
+Unloading 18 unused Assets to reduce memory usage. Loaded Objects now: 1014.
+Total: 1.633975 ms (FindLiveObjects: 0.304215 ms CreateObjectMapping: 0.201988 ms MarkObjects: 1.037040 ms  DeleteObjects: 0.087856 ms)
+
+Platform assembly: E:\Desktop\Tomoshibi\Betas_Data\Managed\System.Xml.dll (this message is harmless)
+0
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Prehubs/Map1/MapChip00
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Play! : nechi001
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+RGBA(0.000, 0.000, 0.000, 0.000)
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Prehubs/Map1/MapChip05
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Prehubs/Map1/MapChip05_Open
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Prehubs/Map1/MapChip05
+ 
+(Filename: C:/buildslave/unity/build/artifacts/generated/common/runtime/DebugBindings.gen.cpp Line: 51)
+
+Setting up 1 worker threads for Enlighten.
+  Thread -> id: 20f88 -> priority: 1 

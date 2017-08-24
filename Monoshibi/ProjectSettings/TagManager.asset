@@ -9,6 +9,7 @@ TagManager:
   - Item
   - MapObject
   - Door
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -19,9 +20,9 @@ TagManager:
   - 
   - 
   - Mask
-  - 
-  - 
-  - 
+  - Check
+  - CheckAble
+  - Player
   - 
   - 
   - 

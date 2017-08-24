@@ -1,0 +1,12 @@
+﻿size 4;
+flag,154,1;
+position,3,14;
+once,0;
+nonIdle;
+
+size 3;
+playSE,unlock;
+changeImage,3,11,MapChip09_Open;
+changeImage,3,14,MapChip01;
+
+end;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//マスクを柔軟に扱いたいがためのクラス、今のところほぼ出番なし
 public class LightMask : MonoBehaviour {
 
     public GameObject player;
@@ -11,9 +12,9 @@ public class LightMask : MonoBehaviour {
 	void Start () {
         status = player.GetComponent<PlayerStatus>();
         render = this.GetComponent<SpriteRenderer>();
+        render.enabled = true;
 	}
 	
 	void Update () {
-        render.color = new Color(render.color.r, render.color.g, render.color.b, 1.0f - 0.1f * status.lightPower / status.maxLightPower);
 	}
 }

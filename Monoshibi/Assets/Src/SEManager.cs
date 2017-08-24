@@ -28,6 +28,7 @@ public class SEManager : MonoBehaviour
 
     public AudioSource audioSource;
     public AudioClip[] clips;
+    float volume = 1f;
 
     
     void Awake()
@@ -35,12 +36,20 @@ public class SEManager : MonoBehaviour
         //DontDestroyOnLoad(this.gameObject);
     }
 
+    public void SetVolume(float level) {
+        volume = level;
+    }
+
     public void PlaySE(string name)
     {
         for(int i = 0; i < clips.Length; i++)
-        { 
+        {
+            if(clips[i] == null)
+            {
+                continue;
+            }
             if (clips[i].name == name)
-                audioSource.PlayOneShot(clips[i]);
+                audioSource.PlayOneShot(clips[i], volume);
         }
     }
 }
