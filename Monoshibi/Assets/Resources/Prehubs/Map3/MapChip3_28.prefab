@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4588618924583544}
   - component: {fileID: 212370645631684174}
-  - component: {fileID: 61924993824915374}
   - component: {fileID: 61947919479768960}
   m_Layer: 0
   m_Name: MapChip3_28
@@ -36,26 +35,12 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1708442363838902}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4336.8, y: -4141.5, z: 0}
+  m_LocalPosition: {x: 1725.0532, y: -2741.7793, z: 0}
   m_LocalScale: {x: 128, y: 128, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &61924993824915374
-BoxCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1708442363838902}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_Offset: {x: 0, y: 0.40129662}
-  serializedVersion: 2
-  m_Size: {x: 1, y: 0.19739151}
 --- !u!61 &61947919479768960
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -67,9 +52,9 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
-  m_Offset: {x: 0, y: -0.4295082}
+  m_Offset: {x: 0, y: -0.3894119}
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.1409804}
+  m_Size: {x: 1, y: 0.2211733}
 --- !u!212 &212370645631684174
 SpriteRenderer:
   m_ObjectHideFlags: 1

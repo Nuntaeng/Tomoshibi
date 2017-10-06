@@ -1,0 +1,18 @@
+﻿size 2;
+check,28,11;
+flag,10,0;
+
+size 11;
+setTextColor,0.89,0.89,0.87,1.0;
+setTextFont,onryou;
+setText,3,……;
+setText,3,アナタノ……/ソノ　リボン……;
+setText,3,ワタシノト　ソックリネ;
+setText,3,ムカシ　ナカヨシダッタ　トモダチト/オソロイデ　ツケテタノ;
+setText,3,アノコモ　ココニ　コナイカナ;
+setText,3,アノコモ　カゾクニ　ナラナイカナ;
+setText,6,ソウシタラ……/ズット　イッショニ　アソベルノニ……;
+setTextFont,OradanoGSRR;
+setFlag,10,1;
+
+end;

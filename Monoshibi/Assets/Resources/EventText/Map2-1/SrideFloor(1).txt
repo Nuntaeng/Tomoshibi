@@ -1,0 +1,9 @@
+﻿size 2;
+check,14,9;
+flag,180,0;
+
+size 2;
+setTextColor,0.89,0.89,0.87,1.0;
+setText,2,ここだけ　たたみがずれている……;
+
+end;

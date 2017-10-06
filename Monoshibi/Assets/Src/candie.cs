@@ -26,7 +26,7 @@ public class candie : MonoBehaviour
         //ろうそくの長さ（スケール）を、現在のライトに応じて変える
         if (!(candle_move < 0.0f))
         {
-            float ScaleY = StartScaleY * (candle_move) / 20.0f;
+            float ScaleY = StartScaleY * lightmove.lightPower / lightmove.maxLightPower;
             transform.localScale = new Vector3(transform.localScale.x, ScaleY, transform.localScale.z);
         }
     }

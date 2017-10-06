@@ -1,0 +1,8 @@
+﻿size 2;
+check,20,11;
+flag,181,0;
+
+size 2;
+setTextColor,0.89,0.89,0.87,1.0;
+setText,2,コマが落ちている;
+end;

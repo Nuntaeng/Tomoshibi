@@ -1,0 +1,13 @@
+﻿size 1;
+check,33,18;
+
+size 7;
+setTextColor,0.89,0.89,0.87,1.0;
+setTextFont,onryou;
+setText,3,オモチャ　イッパイ;
+setText,3,カゾクモ　イッパイ;
+setText,3,タノシイナ　タノシイナ　ウフフッ;
+setText,3,キミハ　マダ　カゾクジャ　ナイノ？;
+setTextFont,OradanoGSRR;
+
+end;

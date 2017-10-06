@@ -48,8 +48,10 @@ public class SEManager : MonoBehaviour
             {
                 continue;
             }
-            if (clips[i].name == name)
+            if (clips[i].name == name) {
                 audioSource.PlayOneShot(clips[i], volume);
+                Debug.Log("SE => " + name);
+            }
         }
     }
 }

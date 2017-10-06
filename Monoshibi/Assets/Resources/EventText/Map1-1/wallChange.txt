@@ -1,0 +1,5 @@
+size 1;
+once,0;
+
+size 1;
+changeImage,16,17,MapChip08;

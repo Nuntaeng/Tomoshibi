@@ -8,10 +8,12 @@ public class EnemyObjectClass : MonoBehaviour {
     [HideInInspector]
     public int posX, posY;
     [HideInInspector]
-    public PlayerStatus status;
+    public PlayerStatus playerStatus;
     //[HideInInspector]
     public GameObject map;
-
+    //コルーチンで敵の消去処理を行っているか？
+    [HideInInspector]
+    public bool killEnable = false;
 
     public void Initialize () {
         this.GetComponent<EnemyChase>().Initialize();
@@ -19,6 +21,7 @@ public class EnemyObjectClass : MonoBehaviour {
 	
 	public void KillEnemy()
     {
+        killEnable = true;
         StartCoroutine(FadeEnemy(60));
     }
 
@@ -32,7 +35,7 @@ public class EnemyObjectClass : MonoBehaviour {
             renderer.color = new Color(renderer.color.r, renderer.color.g, renderer.color.b, 1.0f - ((float)i / (float)time));
             yield return null;
         }
-
-        this.gameObject.SetActive(false);
+        this.transform.parent.GetComponent<EnemyClass>().enemyObj.Remove(this.gameObject);
+        Destroy(this.gameObject);
     }
 }

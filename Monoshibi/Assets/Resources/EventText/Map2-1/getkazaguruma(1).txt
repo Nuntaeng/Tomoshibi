@@ -1,0 +1,9 @@
+﻿size 2;
+check,19,14;
+flag,181,0;
+
+size 2;
+setTextColor,0.89,0.89,0.87,1.0;
+setText,2,かざぐるまが落ちている;
+
+end;

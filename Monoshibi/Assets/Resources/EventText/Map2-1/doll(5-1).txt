@@ -1,0 +1,23 @@
+﻿size 5;
+check,5,15;
+flag,181,1;
+item,12,1;
+item,13,1;
+once,0;
+
+size 13;
+setTextColor,0.89,0.89,0.87,1.0;
+setText,3,ダ　イ　セ　イ　カ　イ;
+setText,5,ウフフッ　キャハハハッ;
+setText,5,ヤクソク　ダヨ　トオシテ　アゲル;
+itemlost,12;
+setText,5,アレ　ソノ　カザグルマ　ナァニ？;
+setText,5,イイナ　ホシイナ;
+setText,5,ソレモ　チョーダイ！;
+itemlost,13;
+setText,5,ジャアネ　バイバイ……　キヒヒッ;
+setFlag,182,1;
+playSE,unlock;
+changeImage,4,15,MapChip2_01;
+
+end;

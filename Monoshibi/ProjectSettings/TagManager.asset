@@ -10,6 +10,7 @@ TagManager:
   - MapObject
   - Door
   - Enemy
+  - Hand
   layers:
   - Default
   - TransparentFX

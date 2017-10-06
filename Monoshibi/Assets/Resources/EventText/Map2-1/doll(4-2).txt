@@ -1,0 +1,13 @@
+﻿size 4;
+check,5,15;
+flag,182,1;
+flag,183,0;
+item,11,0;
+
+size 4;
+setTextColor,0.89,0.89,0.87,1.0;
+setText,5,タケトンボ　ニゲチャッタ;
+setText,5,クルクル　マワッテ　ニゲチャッタ;
+setText,5,ツカマエテ　クレルヨネ　ウフフッ;
+
+end;

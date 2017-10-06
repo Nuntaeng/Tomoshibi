@@ -1,0 +1,23 @@
+﻿size 2;
+flag,931,1;
+once,0;
+
+size 16;
+objectMove,0,down,10,12;
+playerMove,down,3,6;
+playerMove,down,2,3;
+playerMove,down,1,1;
+wait,60;
+playerMove,up,0,1;
+wait,120;
+setCameraChase,0;
+playerMove,down,8,6;
+wait,80;
+cameraMove,up,36,24;
+wait,120;
+fadeColor,0,0,0,1.0;
+fadeOut,30;
+wait,30;
+clear;
+
+end;

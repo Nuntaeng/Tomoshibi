@@ -10,6 +10,10 @@ public class MapChip
 
 
 public class MapScriptTMX : MonoBehaviour {
+    //シーン間でのマップ番号を保持するリトライ用の変数
+    public static int savedMapNumber = -1;
+
+
     public int mapNumber;
     public string[] stageAddr;
     public MapChip[] mapChipsArray;
@@ -49,7 +53,10 @@ public class MapScriptTMX : MonoBehaviour {
                 Debug.Log(stageAddr[i]);
             }
         }
-            
+        if (savedMapNumber == -1)
+        {
+            savedMapNumber = mapNumber;
+        }
     }
 
     public void LoadMapFromTMXFile() {

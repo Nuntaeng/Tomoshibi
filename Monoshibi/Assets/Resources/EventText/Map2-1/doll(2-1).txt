@@ -1,0 +1,24 @@
+﻿size 5;
+check,5,15;
+flag,181,1;
+item,12,1;
+item,13,1;
+once,0;
+
+size 14;
+setTextColor,0.89,0.89,0.87,1.0;
+setText,3,ダ　イ　セ　イ　カ　イ;
+itemlost,12;
+wait,20;
+setText,5,アレ　ソノ　カザグルマ　ナァニ？;
+setText,5,イイナ　ホシイナ;
+setText,5,ソレモ　チョーダイ！;
+itemlost,13;
+wait,20;
+setText,5,ジャア　サイゴノ　オネガイダヨ;
+setText,5,タケトンボ　ニゲチャッタ;
+setText,5,クルクル　マワッテ　ニゲチャッタ;
+setText,5,ツカマエテ　クレルヨネ　ウフフッ……;
+setFlag,182,1;
+
+end;

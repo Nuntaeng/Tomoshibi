@@ -12,6 +12,7 @@ public class itemlist : MonoBehaviour
     int childobj;
     public GameObject im;
     public GameObject candle;
+    public GameObject candlebottom;
     void Start()
     {
         childobj = this.transform.childCount;
@@ -25,6 +26,13 @@ public class itemlist : MonoBehaviour
     }  
     public void itemget(int itemid)
     {
+        for(int i = 0; i < childobj; ++i)
+        {
+            if (id[i] == itemid)
+            {
+                return;
+            }
+        }
         for(int i = 0; i < childobj; ++i)
         {
             if (Image[i] == false)//フラグが表示か調べる
@@ -44,11 +52,12 @@ public class itemlist : MonoBehaviour
                     if (m.itemData[itemid].itemon_hand == 1)
                     {                      
                         candie candleUI = candle.GetComponent<candie>();
+                        candlebottom candlebottomui = candlebottom.GetComponent<candlebottom>();
                         candleUI.candleui();
+                        candlebottomui.candlebottomui();
                     }
                 }
                 break;
-                
             }
         }
     }
@@ -62,11 +71,12 @@ public class itemlist : MonoBehaviour
             {
                 ++boxNo;
             } while (id[boxNo] != itemid);//アイテムIDのアイテムボックス番号を調べる
+            
             while (Image[boxNo+1]==true)//１つ先のイメージがあるかどうか調べる
             {
                 GameObject image_icon = transform.GetChild(boxNo).gameObject;
                 image = image_icon.GetComponent<Image>();
-                image.sprite = m.itemData[boxNo+1].itemIcon;//イメージにアイコンを埋め込む
+                image.sprite = m.itemData[id[boxNo+1]].itemIcon;//イメージにアイコンを埋め込む
                 id[boxNo] = id[boxNo + 1];//１つ先のIDを今のIDに上書き
                 ++boxNo;
             }

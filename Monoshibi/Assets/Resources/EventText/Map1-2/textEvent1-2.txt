@@ -1,0 +1,15 @@
+﻿size 1;
+check,19,18;
+
+size 11;
+setTextColor,0.89,0.89,0.87,1.0;
+setText,2,古びた紙切れが落ちている;
+wait,10;
+setText,3,『告知　村の×へ;
+setText,3,×近、子供の神×しが頻××ている;
+setText,3,各自、子×××は目を×さぬこと;
+setText,3,×た、村の北×にある古い××には;
+setText,3,×して近××ぬこと』;
+wait,10;
+setText,2,ところどころ汚れていて読めない……;
+wait,30;

@@ -4,14 +4,17 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class FadeScript : MonoBehaviour {
-    Image render;
+    [HideInInspector]
+    public Image render;
     
 
 	void Start () {
         render = this.GetComponent<Image>();
         Color color = render.color;
-        render.color = new Color(color.r, color.g, color.b, 0.0f);
+        render.color = new Color(color.r, color.g, color.b, 1.0f);
     }
+
+
 
     public void FadeIn(int time)
     {

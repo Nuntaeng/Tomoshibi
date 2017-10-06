@@ -13,10 +13,13 @@ public class EventFunctions : MonoBehaviour {
 
 
 
-    //プレイヤーキャラクターの移動、斜めはやらないほうが良いよ
-    public IEnumerator PlayerMove(UnityAction<bool> result, GameObject obj, Vector2 direction, int distance, int speed)
+    //プレイヤーキャラクターの移動
+    public IEnumerator PlayerMove(UnityAction<bool> result, GameObject obj, Vector2 direction, int distance, int speed, int mode)
     {
-        result(true);
+        if (mode == 0)
+        {
+            result(true);
+        }
         int moveCnt = 0;
         direction = direction.normalized;
         int posX = (int)((obj.transform.position.x + 64.0f) / 128.0f);
@@ -37,25 +40,12 @@ public class EventFunctions : MonoBehaviour {
         {
             //長さ１２８の分を移動する
             float i = 0;
-            while(i < 128.0f)
+            while (i < 128.0f)
             {
                 obj.transform.position += new Vector3(direction.x, -direction.y, 0) * speed;
                 i += speed;
                 yield return null;
             }
-            //移動を終えたらfloatの計算の誤差を修正、修正というかマス単位の座標にキャラを置きなおしてる
-            //int moveX = (int)direction.x;
-            //int moveY = (int)direction.y;
-            //if (moveX != 0)
-            //{
-            //    posX += moveX;
-            //    obj.transform.position = new Vector3(posX * 128, obj.transform.position.y, obj.transform.position.z);
-            //}
-            //else if(moveY != 0)
-            //{
-            //    posY -= moveY;
-            //    obj.transform.position = new Vector3(obj.transform.position.x, posY * 128 + 64.0f, obj.transform.position.z);
-            //}
             moveCnt++;
         }
 
@@ -63,7 +53,10 @@ public class EventFunctions : MonoBehaviour {
         animator.SetFloat("Player_Input_Y", 0.0f);
         animator.SetFloat("Player_Input_X", 0.0f);
         //イベントの終了を告げるfalseを返す
-        result(false);
+        if (mode == 0)
+        {
+            result(false);
+        }
         yield return null;
     }
 
@@ -84,8 +77,11 @@ public class EventFunctions : MonoBehaviour {
         Vector3 fixDir = new Vector3(fixX, 0.0f, 0.0f).normalized;
 
         //アニメーションとプレイヤーの向きを補正
-        animator.SetFloat("Player_Input_Y", 0.0f);
-        animator.SetFloat("Player_Input_X", fixDir.x);
+        if (animator != null)
+        {
+            animator.SetFloat("Player_Input_Y", 0.0f);
+            animator.SetFloat("Player_Input_X", fixDir.x);
+        }
         obj.GetComponent<PlayerStatus>().direction = new Vector2(fixDir.x, 0.0f);
 
         while (fixX > 1.0f || fixX < -1.0f)
@@ -100,8 +96,11 @@ public class EventFunctions : MonoBehaviour {
         float fixY = posY * 128.0f - obj.transform.position.y;
         fixDir = new Vector3(0.0f, fixY, 0.0f).normalized;
         //アニメーションとプレイヤーの向きを補正
-        animator.SetFloat("Player_Input_Y", fixDir.y);
-        animator.SetFloat("Player_Input_X", 0.0f);
+        if (animator != null)
+        {
+            animator.SetFloat("Player_Input_Y", fixDir.y);
+            animator.SetFloat("Player_Input_X", 0.0f);
+        }
         obj.GetComponent<PlayerStatus>().direction = new Vector2(0.0f, fixDir.y);
 
 
@@ -148,7 +147,7 @@ public class EventFunctions : MonoBehaviour {
         Debug.Log(path);
 
         //インスタンスの生成に成功した場合は引数のインスタンスを破棄して代わりに生成したインスタンスを返す
-        GameObject clone = Instantiate(prefab, obj.transform.position, Quaternion.identity);
+        GameObject clone = Instantiate(prefab, obj.transform.position, prefab.transform.rotation);
         if(clone == null)
         {
             return obj;
@@ -164,21 +163,39 @@ public class EventFunctions : MonoBehaviour {
     //テキストを出す
     public IEnumerator SetTextWindow(UnityAction<bool> result, float wait, string text, UnityEngine.UI.Text textWindow, GameObject obj)
     {
+        string textData = "";
+
         result(true);
+        int numText = 0;
         Animator animator = obj.GetComponent<Animator>();
         animator.SetFloat("Player_Input_Y", 0.0f);
         animator.SetFloat("Player_Input_X", 0.0f);
 
         for (int i = 0; i < text.Length; ++i)
         {
-            textWindow.text = text.Substring(0, i + 1);
-            //Debug.Log(i);
-            yield return new WaitForSeconds(wait / 60.0f);
+            string moji = text.Substring(i, 1);
+            if (moji == "/")
+            {
+                moji = "\n";
+                numText = 0;
+            }
+            textData += moji;
+            textWindow.text = textData;
+            ++numText;
+            if (wait > 0)
+            {
+                yield return new WaitForSeconds(wait / 60.0f);
+            }
         }
+        yield return new WaitForSeconds(wait / 60.0f);
+        textWindow.transform.GetChild(0).GetComponent<Image>().transform.localPosition = new Vector3(numText * (textWindow.fontSize / 1.5f), -17.0f, 0.0f);
+        textWindow.transform.GetChild(0).GetComponent<Image>().enabled = true;
+
 
         while(!Input.GetButtonDown("Fire1")){
             yield return null;
         }
+        textWindow.transform.GetChild(0).GetComponent<Image>().enabled = false;
 
         textWindow.text = "";
         result(false);
@@ -213,18 +230,25 @@ public class EventFunctions : MonoBehaviour {
 
     // BGM方のコード
     public void SoundFadeIn(AudioSource src, int time) {
-        src.volume = 0f;
+        src.loop = true;
         StartCoroutine(SFadeIn(src, time));
     }
 
     public void SoundFadeOut(AudioSource src, int time) {
-        src.volume = 1f;
-        StartCoroutine(SFadeOut(src, time));
+        src.loop = true;
+        float volume = src.volume;
+        StartCoroutine(SFadeOut(src, time, volume));
     }
 
-    public void SoundChagne(AudioSource src, AudioClip clip, int time) {
-        src.volume = 1f;
-        StartCoroutine(SChange(src, clip, time));
+    public void SoundChagne(AudioSource src, AudioClip clip) {
+        src.loop = true;
+        src.clip = clip;
+        src.Play();
+    }
+
+    public void SoundChangeFade(AudioSource src, AudioClip clip, int duration, bool isLoop) {
+        src.loop = isLoop;
+        StartCoroutine(SFadeChange(src, clip, duration));
     }
 
     IEnumerator SFadeIn(AudioSource src, int time) {
@@ -234,19 +258,68 @@ public class EventFunctions : MonoBehaviour {
             yield return null;
         }
     }
-    IEnumerator SFadeOut(AudioSource src, int time) {
+    IEnumerator SFadeOut(AudioSource src, int time, float volume) {
         for (int i = 1; i <= time; ++i)
         {
-            src.volume = 1f - (float)i / (float)time;
+            src.volume = (1f - (float)i / (float)time) * volume;
             yield return null;
         }
-        src.Stop();
     }
-    IEnumerator SChange(AudioSource src, AudioClip clip, int time) {
-        yield return StartCoroutine(SFadeOut(src, time));
+
+    IEnumerator SFadeChange(AudioSource src, AudioClip clip, int duration) {
+        yield return StartCoroutine(SFadeOut(src, duration, src.volume));
         src.clip = clip;
         src.Play();
-        yield return StartCoroutine(SFadeIn(src, time));
+        yield return StartCoroutine(SFadeIn(src, duration));
+    }
+
+    //カメラ移動
+    public IEnumerator CameraMove(UnityAction<bool> result, CameraScript obj, Vector2 direction, int distance, int speed)
+    {
+        result(true);
+        int moveCnt = 0;
+        Vector2 dir = direction.normalized;
+        if (dir != Vector2.zero)
+        {
+            while (moveCnt < distance)
+            {
+                //長さ1マスの分を移動する、ただカメラはプレイヤーとくらべて物理がないぶんだけ速いので調節してある
+                float i = 0;
+                while (i < 128.0f)
+                {
+                    obj.shiftCount += new Vector3(dir.x, -dir.y, 0) * speed / 8.0f;
+                    i += speed;
+                    yield return null;
+                }
+                moveCnt++;
+            }
+        }else
+        {
+            //移動方向がその場（イベント関数で引数に"reset"を指定したとき）なら、カメラの位置はプレイヤーに戻る
+            obj.shiftCount = Vector3.zero;
+        }
+
+        result(false);
+    }
+
+    //スポーンリストにあるオブジェクトを移動、カメラのを使いまわせるようにつくればよかったなあ
+    public IEnumerator ObjMove(UnityAction<bool> result, GameObject obj, Vector2 direction, int distance, int speed)
+    {
+        //result(true);
+        int moveCnt = 0;
+        Vector2 dir = direction.normalized;
+        while (moveCnt < distance)
+        {
+            //長さ1マスの分を移動する
+            float i = 0;
+            while (i < 128.0f)
+            {
+                obj.transform.position += new Vector3(dir.x, -dir.y, 0) * speed;
+                i += speed;
+                yield return null;
+            }
+            moveCnt++;
+        }
     }
 }
 

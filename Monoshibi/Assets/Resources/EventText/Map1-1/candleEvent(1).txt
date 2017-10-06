@@ -1,0 +1,9 @@
+﻿size 2;
+item,1,1;
+check,24,27;
+
+size 2;
+setTextColor, 0.89,0.89,0.87, 1.0;
+setText,1,もう棚にはなにもないようだ;
+
+end;

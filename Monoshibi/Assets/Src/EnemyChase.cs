@@ -11,18 +11,22 @@ public class EnemyChase : MonoBehaviour {
     //ステータス
     NPCStatus status;
 
-    //配列マップ上での座標とその最大値
-    int maxX, maxY;
     //目的地
     int destX, destY;
 
     //次に進む方向
     Vector2 direction;
-    //前回進んだ方向
     Vector2 prevDir;
 
     //クラス内での経過時間を保存しておく
+    [HideInInspector]
     public int classtimer;
+
+    //方向転換の間隔と、待機時間（フレーム単位）
+    public int turnInterval;
+    public int stopInterval;
+    //追尾のブレ（マス単位）
+    public int randamDirection;
 
     //マップ情報
     MapScript mapClass;
@@ -33,6 +37,7 @@ public class EnemyChase : MonoBehaviour {
 
     //カウント
     int classCount;
+    System.Random rand;
 
 
     public void Initialize()
@@ -40,7 +45,7 @@ public class EnemyChase : MonoBehaviour {
         status = this.GetComponent<NPCStatus>();
         enemyClass = this.transform.GetComponent<EnemyObjectClass>();
         mapClass = enemyClass.map.GetComponent<MapScript>();
-        playerStatus = enemyClass.status;
+        playerStatus = enemyClass.playerStatus;
 
         status.posX = enemyClass.posX;
         status.posY = enemyClass.posY;
@@ -48,20 +53,31 @@ public class EnemyChase : MonoBehaviour {
 
         this.transform.position = new Vector3((float)(status.posX * 128), (float)(status.posY * -128), 1);
         classtimer = 0;
-        direction = new Vector2(1, 0);
 
         map = mapClass.GetMap();
-        maxX = map.GetLength(1) - 1;
-        maxY = map.GetLength(0) - 1;
         status.state = PlayerState.Idle;
-        classCount = 0;
+        classCount = -10;
+        direction = Vector2.zero;
+        rand = new System.Random();
     }
 
+    //更新
     void Update()
     {
+        //プレイヤーがイベント中なら何もしない
+        if(playerStatus.state == PlayerState.Idle)
+        {
+            return;
+        }
         MoveForDest();
         this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.y / 128.0f);
 
+        //一定時間経過後、消えていなくなる
+        if(classtimer > 2400)
+        {
+            FadeEnemy();
+        }
+        ++classtimer;
     }
 
 
@@ -71,69 +87,35 @@ public class EnemyChase : MonoBehaviour {
         int posX = status.posX;
         int posY = status.posY;
         int speed = status.speed;
+        prevDir = direction;
 
-        if (classtimer == 0)
+        //プレイヤーを追いかける(目的地を設定フレームごとに更新)
         {
-            classtimer = 128;
-
-            //移動が終わったら上下左右のマップデータを判定
-            switch (playerStatus.state)
-            {
-                //プレイヤーを感知しているときはプレイヤーの位置を目的地に
-                case PlayerState.Active:
-                    destX = playerStatus.posX;
-                    destY = playerStatus.posY;
-                    break;
-                //プレイヤーが通常時以外なら動かない
-                default:
-                    destX = posX;
-                    destY = posY;
-                    classtimer = 0;
-                    break;
-            }
-            direction = ChaseDest(direction, destX, destY);
-
-        }
-        else if (Mathf.Abs(destX - posX) > 2 || Mathf.Abs(destY - posY) > 2)
-        {
-            //distance分だけ移動
-            this.transform.localPosition += new Vector3(direction.x, direction.y, 0) * (speed + 1);
-            classtimer -= speed;
-            if (classtimer <= 0)
-            {
-                posX = (int)(this.transform.position.x / 128.0f);
-                posY = (int)(-this.transform.position.y / 128.0f);
-                classtimer = 0;
-            }
-
-        }
-        else
-        {
-            //近くのマスにいるときはマス座標を無視して襲い掛かる（移動方向は2秒ごとに更新）
-
-
             if (classCount == 0)
             {
-                prevDir = new Vector2(playerStatus.transform.position.x - this.transform.position.x, playerStatus.transform.position.y - this.transform.position.y);
-                prevDir = prevDir.normalized * speed;
+                //プレイヤーの位置をぶれて認識させる
+                float playerX = playerStatus.transform.position.x + rand.Next(randamDirection * 128) / 10.0f;
+                float playerY = playerStatus.transform.position.y + rand.Next(randamDirection * 128) / 10.0f;
+                float dirX = playerX - this.transform.position.x;
+                float dirY = playerY - this.transform.position.y;
+                direction = new Vector2(dirX, dirY);
+                direction = direction.normalized * speed;
+                
             }
+            setAnimation();
             ++classCount;
-            if(classCount > 120)
+            //方向転換前に指定フレーム分待機(最大二秒ほどのブレがある)
+            if(classCount > turnInterval + rand.Next(120))
             {
-                classCount = 0;
+                classCount = -stopInterval - rand.Next(20);
             }
-
-            this.transform.localPosition += new Vector3(prevDir.x, prevDir.y, 0);
+            if (classCount < 0)
+            {
+                direction = direction * 0.9f;
+            }
+            this.transform.localPosition += new Vector3(direction.x, direction.y, 0);
             posX = (int)(this.transform.position.x / 128.0f);
             posY = (int)(-this.transform.position.y / 128.0f);
-
-            //遠ざかったらもう一回追尾判定する
-            if (Mathf.Abs(destX - posX) > 2 || Mathf.Abs(destY - posY) > 2)
-            {
-                classtimer = 0;
-                classCount = 0;
-            }
-
         }
 
 
@@ -141,38 +123,42 @@ public class EnemyChase : MonoBehaviour {
         status.posX = posX;
         status.posY = posY;
         status.speed = speed;
+
+
     }
 
-    //目的地に進んでみる
-    Vector2 ChaseDest(Vector2 prevDir, int nDestX, int nDestY)
+    //アニメーション用の変数をセット
+    void setAnimation()
     {
-        int posX = status.posX;
-        int posY = status.posY;
-        Vector2 direction = new Vector2(0.0f, 0.0f);
+        Animator animator = GetComponent<Animator>();
 
-        if (nDestX > posX)
+        if (classCount <= 1)
         {
-            direction.x = 1.0f;
+            animator.SetBool("isMove", false);
         }
-        if (nDestX < posX)
+        else
         {
-            direction.x = -1.0f;
+            animator.SetBool("isMove", true);
         }
-        if (nDestY > posY)
+        if(classCount < 0)
         {
-            direction.y = -1.0f;
-        }
-        if (nDestY < posY)
-        {
-            direction.y = 1.0f;
+            return;
         }
 
-        //現在地と目的地が一致したときは移動しない
-        if (posX == destX && posY == destY)
-        {
-            direction = new Vector2(0.0f, 0.0f);
-        }
 
-        return direction;
+        float angle = Mathf.Rad2Deg * Mathf.Atan2(direction.y, direction.x) + 180.0f + 22.0f;
+        //Debug.Log(direction);
+        int animID = (int)(angle / 45.0f);
+        animator.SetInteger("animID", animID);
+    }
+
+    //一定時間経過後にエネミーは消滅
+    void FadeEnemy()
+    {
+        if (enemyClass.killEnable)
+        {
+            return;
+        }
+        enemyClass.KillEnemy();
     }
 }

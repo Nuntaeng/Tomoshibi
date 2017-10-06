@@ -6,12 +6,17 @@ using UnityEngine.SceneManagement;
 
 public class GameStart : MonoBehaviour {
 
+    public AudioSource BGM;
     public float speed = 0.05f;  //不透明化の速さ
     float alfa;    //A値を操作するための変数
     float red, green, blue;    //RGBを操作するための変数
     bool fadeOut;
     Animator anim;
     GameObject fire;
+
+
+
+
 
     void Start()
     {
@@ -28,12 +33,6 @@ public class GameStart : MonoBehaviour {
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.Return))
-        {
-            fadeOut = true;
-
-            anim.SetBool("extFire", true);
-        }
         if (fadeOut) { 
             GetComponent<Image>().color = new Color(red, green, blue, alfa);
             alfa += speed;
@@ -44,8 +43,38 @@ public class GameStart : MonoBehaviour {
         }
     }
 
+    //外部からキー入力があったときにシーン移行を開始
+    public void fadeStart()
+    {
+        fadeOut = true;
+        StartCoroutine(BGMFadeOut(60));
+        anim.SetBool("extFire", true);
+    }
+
     public void Load()
     {
-            SceneManager.LoadScene("GameScene");
+        ////////////////////////////////////
+        //マップとアイテムのセーブを初期化//
+        ////////////////////////////////////
+        Itemsavedata.candle_save = 0;
+        Itemsavedata.kokesi_save = 0;
+        Itemsavedata.omamori_save = 0;
+        Itemsavedata.flower_save = 0;
+        Itemsavedata.kusi_save = 0;
+        Itemsavedata.dendendram_save = 0;
+        MapScriptTMX.savedMapNumber = -1;
+        SceneManager.LoadScene("GameScene");
+    }
+
+    IEnumerator BGMFadeOut(int time)
+    {
+        //BGMのボリュームは０から１で都合よく割合計算に利用できるので保持
+        float BGMVolume = BGM.volume;
+        //BGMをフェードアウト
+        for(int i = 0; i < time; ++i)
+        {
+            BGM.volume = (1.0f - (float)i / (float)time) * BGMVolume;
+            yield return null;
+        }
     }
 }

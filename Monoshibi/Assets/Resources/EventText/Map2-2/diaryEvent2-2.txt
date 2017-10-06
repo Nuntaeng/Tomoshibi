@@ -1,0 +1,36 @@
+﻿size 2;
+check,12,6;
+once,0;
+
+size 29;
+setTextColor,0.89,0.89,0.87,1.0;
+setText,2,本がある;
+setText,2,誰かの日記のようだ;
+wait,30;
+setTextDest,center;
+setTextFont,OradanoGSRR;
+setText,3,『〇月△日;
+setText,3,あの子は今日も、私に笑いかけてくれた。;
+setText,3,病気はどんどん悪くなっているというのに……;
+setText,3,あの子のためなら、私は何だってしよう。;
+setText,3,あの子は私の、かけがえのない宝物だから……』;
+wait,30;
+setText,3,『〇月◇日;
+setText,3,あの子の体はとても冷えている。;
+setText,3,夏だというのに、寒いのかしら……;
+setText,3,関節も曲がらなくなっている。;
+setText,3,愛しい愛しい私の子……;
+setText,3,明日は笑い返してくれるかしら……』;
+wait,30;
+setTextColor,1.0,0,0,1.0;
+setText,10,『私　　の　子　　　　は/ど　　こ　　　？』;
+wait,10;
+setTextDest,bottom;
+setTextColor,0.89,0.89,0.87,1.0;
+setText,2,日記はここで終わっている;
+setText,5,……？;
+setText,2,紙が不自然にふくらんでいる;
+setFlag,230,1;
+changeImage,12,6,MapChip2_38;
+
+end;

@@ -213,7 +213,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: f025cd243a564544c8e43870bc6d8177, type: 3}
+      m_Icon: {fileID: 2800000, guid: b8d2d6f75dcd9674580ad2a4ab593204, type: 3}
       m_Width: 128
       m_Height: 128
   m_BuildTargetBatching: []
@@ -472,7 +472,7 @@ PlayerSettings:
     Collab: 1
     ErrorHub: 0
     Hub: 0
-    UNet: 0
+    UNet: 1
   cloudProjectId: 6645cf04-1bdc-45a4-aa78-85a9bdaaacd9
   projectName: Monoshibi
   organizationId: rousoku_shokunin

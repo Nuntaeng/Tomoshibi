@@ -12,6 +12,7 @@ enum EventIndex
     EVENT_IF_COUNT,
     EVENT_IF_CHECK,
     EVENT_IF_ITEM,
+    EVENT_IF_COLLIDE,
 
     //処理
     EVENT_FUNC_PLAYERMOVE,
@@ -33,10 +34,31 @@ enum EventIndex
     EVENT_FUNC_ENEMYSETMAXDETECT,
     EVENT_FUNC_FADEIN,
     EVENT_FUNC_FADEOUT,
+    EVENT_FUNC_FADECOLOR,
     EVENT_FUNC_CHANGEMAP,
     EVENT_FUNC_BGMSTART,
     EVENT_FUNC_BGMSTOP,
     EVENT_FUNC_BGMCHANGE,
+    EVENT_FUNC_BGMFADECHANGE,
+    EVENT_FUNC_BGMCHANGEONESHOT,
+    EVENT_FUNC_QUAKE,
+    EVENT_FUNC_MOVECAMERA,
+    EVENT_FUNC_SETCAMERAPOS,
+    EVENT_FUNC_SETCAMERACHASE,
+    EVENT_FUNC_REMOVECOLLIDER,
+
+    EVENT_FUNC_SETDARK,
+    EVENT_FUNC_UIERASE,
+    EVENT_FUNC_ENDROOT,
+    EVENT_FUNC_BACKIMAGE,
+    EVENT_FUNC_CLEAR,
+    EVENT_FUNC_SETANIMSTATE,
+    EVENT_FUNC_OBJECTMOVE,
+    EVENT_FUNC_PLAYERNOWAITMOVE,
+
+    EVENT_FUNC_SETTEXTSIZE,
+    EVENT_FUNC_SETTEXTFONT,
+    EVENT_FUNC_SETLIGHTMINSIZE,
 }
 
 
@@ -107,6 +129,7 @@ public class EventManager : MonoBehaviour {
     public GameObject lightManager;
     public GameObject itemmanager;
     public GameObject itembox;
+    public GameObject Importancebox;
     public GameObject enemyManager;
     public Speaker speaker;
     public Text textWindowBottom;
@@ -117,6 +140,16 @@ public class EventManager : MonoBehaviour {
     public SoundContainer BGM;
     public SoundContainer DetectSE;
     public SoundContainer ChaseSE;
+    public DarkChase Darks;
+    public GameObject UI;
+    public Maskerase maskerase;
+    public LightErase lighterase;
+    public EndImage endimage;
+    public GameClear gameclear;
+    public CameraScript cameraScr;
+    public PlayerCheck playerCheck;
+    public Dictionary<int, Transform> collideObservers
+        = new Dictionary<int, Transform>();
 
 
     [HeaderAttribute("EventArray")]
@@ -134,6 +167,10 @@ public class EventManager : MonoBehaviour {
     //全体でイベントが起こっているかどうか。基本的にイベントの重複発生を防ぐためのもの
     [HideInInspector]
     public int eventState = -1;
+
+    //イベントに入ったときの状態
+    [HideInInspector]
+    public PlayerState prevState;
     
     void Start()
     {
@@ -145,8 +182,6 @@ public class EventManager : MonoBehaviour {
         lightObj = lightManager.GetComponent<LightManager>();
         enemyClass = enemyManager.GetComponent<EnemyClass>();
         fade = fadeMask.GetComponent<FadeScript>();
-        //mapLoader = map.GetComponent<MapScript>();
-
         useEventIndex = map.GetComponent<MapScriptTMX>().mapNumber;
         EventInitialize();
     }
@@ -186,37 +221,51 @@ public class EventManager : MonoBehaviour {
             eventClass.Initialize();
 
             eventStatus[i].eventClass = eventClass;
-
+            
         }
+        GameObject item_manager = itemmanager;
+        Itemsavedata item_load = item_manager.GetComponent<Itemsavedata>();
+        item_load.itemloads();
+
     }
 
     //発動中のイベントが存在したらプレイヤーは操作不能のIdle状態へ移行する
     private void FixedUpdate()
     {
-        if(status.state == PlayerState.Dead)
+        if (status.state != PlayerState.Idle)
         {
-            return;
+            prevState = status.state;
         }
+
+        bool isEventNow = false;
         for (int i = 0; i < eventStatus.Length; ++i)
         {
             //イベントの更新処理を実行
             eventStatus[i].eventClass.Run();
+
             //ループ中にマップ切り替えがあるとout of range出すのでその判定
             if (eventStatus.Length <= i)
             {
                 continue;
             }
+
             //イベント状態を判定
             if (eventStatus[i].eventState && eventStatus[i].idleEvent)
             {
                 status.state = PlayerState.Idle;
+                isEventNow = true;
                 eventState = i;
-                return;
+                break;
+            }else
+            {
+                eventState = -1;
             }
         }
-
-        status.state = PlayerState.Active;
-        eventState = -1;
+        //発動中のイベントが一つもなかったらIdleの状態を解除
+        if (!isEventNow)
+        {
+            status.state = prevState;
+        }
     }
 
 
@@ -230,6 +279,7 @@ public class EventManager : MonoBehaviour {
         keyWord.Add("once", (int)EventIndex.EVENT_IF_COUNT);
         keyWord.Add("check", (int)EventIndex.EVENT_IF_CHECK);
         keyWord.Add("item", (int)EventIndex.EVENT_IF_ITEM);
+        keyWord.Add("collision", (int)EventIndex.EVENT_IF_COLLIDE);
 
         //処理
         keyWord.Add("playerMove", (int)EventIndex.EVENT_FUNC_PLAYERMOVE);
@@ -251,9 +301,30 @@ public class EventManager : MonoBehaviour {
         keyWord.Add("setEnemyMaxDetect", (int)EventIndex.EVENT_FUNC_ENEMYSETMAXDETECT);
         keyWord.Add("fadeIn", (int)EventIndex.EVENT_FUNC_FADEIN);
         keyWord.Add("fadeOut", (int)EventIndex.EVENT_FUNC_FADEOUT);
+        keyWord.Add("fadeColor", (int)EventIndex.EVENT_FUNC_FADECOLOR);
         keyWord.Add("ChangeMap", (int)EventIndex.EVENT_FUNC_CHANGEMAP);
         keyWord.Add("BGMStart", (int)EventIndex.EVENT_FUNC_BGMSTART);
         keyWord.Add("BGMStop", (int)EventIndex.EVENT_FUNC_BGMSTOP);
         keyWord.Add("BGMChange", (int)EventIndex.EVENT_FUNC_BGMCHANGE);
+        keyWord.Add("BGMFadeChange", (int)EventIndex.EVENT_FUNC_BGMFADECHANGE);
+        keyWord.Add("BGMChangeOneShot", (int)EventIndex.EVENT_FUNC_BGMCHANGEONESHOT);
+        keyWord.Add("quake", (int)EventIndex.EVENT_FUNC_QUAKE);
+        keyWord.Add("cameraMove", (int)EventIndex.EVENT_FUNC_MOVECAMERA);
+        keyWord.Add("setCameraPos", (int)EventIndex.EVENT_FUNC_SETCAMERAPOS);
+        keyWord.Add("setCameraChase", (int)EventIndex.EVENT_FUNC_SETCAMERACHASE);
+        keyWord.Add("removeCollider", (int)EventIndex.EVENT_FUNC_REMOVECOLLIDER);
+
+        keyWord.Add("setDark", (int)EventIndex.EVENT_FUNC_SETDARK);
+        keyWord.Add("uiErase", (int)EventIndex.EVENT_FUNC_UIERASE);
+        keyWord.Add("Endingroot", (int)EventIndex.EVENT_FUNC_ENDROOT);
+        keyWord.Add("endImage", (int)EventIndex.EVENT_FUNC_BACKIMAGE);
+        keyWord.Add("clear", (int)EventIndex.EVENT_FUNC_CLEAR);
+        keyWord.Add("setAnimState", (int)EventIndex.EVENT_FUNC_SETANIMSTATE);
+        keyWord.Add("playerNoWaitMove", (int)EventIndex.EVENT_FUNC_PLAYERNOWAITMOVE);
+        keyWord.Add("objectMove", (int)EventIndex.EVENT_FUNC_OBJECTMOVE);
+
+        keyWord.Add("setTextSize", (int)EventIndex.EVENT_FUNC_SETTEXTSIZE);
+        keyWord.Add("setTextFont", (int)EventIndex.EVENT_FUNC_SETTEXTFONT);
+        keyWord.Add("setLightSize", (int)EventIndex.EVENT_FUNC_SETLIGHTMINSIZE);
     }
 }

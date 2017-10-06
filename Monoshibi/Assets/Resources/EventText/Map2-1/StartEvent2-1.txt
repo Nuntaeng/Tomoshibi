@@ -1,0 +1,26 @@
+﻿size 2;
+position,3,17;
+once,0;
+
+size 19;
+BGMStop,BGM,30;
+BGMStop,DetectSE,30;
+BGMStop,ChaseSE,30;
+setText,5,……？;
+setText,3,また、あの声がする……;
+wait,60;
+setTextDest,center;
+setTextFont,OradanoGSRR;
+setTextColor,1.0,0.8,0.8,1.0;
+setText,4,……ドコへ行くの……？;
+setTextColor,1.0,0.6,0.6,1.0;
+setText,6,……そっちじゃナイわ……;
+setTextColor,1.0,0.2,0.2,1.0;
+setText,8,……こっチ……コッちヨ……;
+BGMStart,BGM,30,BGM2;
+BGMChange,DetectSE,Detect2;
+BGMChange,ChaseSE,Chase2;
+setEnemyMaxDetect, 2500;
+createEnemy, 1;
+
+end;

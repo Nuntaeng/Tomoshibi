@@ -49,7 +49,6 @@ public class itemtext : MonoBehaviour
                 Text t = GetComponent<Text>();
                 t.text = "";
                 texttime = 0.0f;
-                // textbox.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.0f);
             }
         }
     }

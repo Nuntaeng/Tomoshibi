@@ -1,0 +1,13 @@
+﻿size 4;
+check,19,14;
+once,0;
+flag,181,1;
+flag,185,0;
+
+size 4;
+setTextColor,0.89,0.89,0.87,1.0;
+setText,1,かざぐるまを手に入れた;
+changeImage,19,14,MapChip2_42;
+itemget,13;
+
+end;

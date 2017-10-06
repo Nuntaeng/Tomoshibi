@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BackTitle : MonoBehaviour {
 
     public float speed = 0.01f;  //不透明化の速さ
     float alfa;    //A値を操作するための変数
     bool fadeOut;
+    string loadScene;
 
     // Use this for initialization
     void Start () {
@@ -17,9 +19,15 @@ public class BackTitle : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if (Input.GetKey(KeyCode.Return))
+        if (Input.GetButtonDown("Fire1") && !fadeOut)
         {
             fadeOut = true;
+            loadScene = "Retry";
+        }
+        if (Input.GetButtonDown("Fire2") && !fadeOut)
+        {
+            fadeOut = true;
+            loadScene = "Title";
         }
         if (fadeOut)
         {
@@ -27,15 +35,19 @@ public class BackTitle : MonoBehaviour {
             alfa += speed;
             if (alfa >= 1.0f)
             {
-                Invoke("Load", 1.5f);
+                Invoke(loadScene, 1.5f);
             }
         }
     }
 
 
-    public void Load()
+    public void Title()
     {
-        Application.LoadLevel("TitleScene");
+        SceneManager.LoadScene("JecLogoScene");
+    }
+    public void Retry()
+    {
+        SceneManager.LoadScene("GameScene");
     }
 
 }

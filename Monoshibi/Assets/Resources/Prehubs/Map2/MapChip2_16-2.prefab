@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4671025683429486}
   - component: {fileID: 212551551773444250}
+  - component: {fileID: 61591187805759112}
   m_Layer: 0
   m_Name: MapChip_1
   m_TagString: Untagged
@@ -130,6 +131,20 @@ BoxCollider2D:
   m_Offset: {x: 0.41335773, y: 0}
   serializedVersion: 2
   m_Size: {x: 0.173284, y: 1}
+--- !u!61 &61591187805759112
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1378169151318250}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
 --- !u!212 &212273603165614476
 SpriteRenderer:
   m_ObjectHideFlags: 1

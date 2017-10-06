@@ -1,0 +1,22 @@
+﻿size 4;
+check,5,15;
+flag,182,1;
+item,11,1;
+once,0;
+
+size 13;
+setTextColor,0.89,0.89,0.87,1.0;
+setText,5,ヤッタ　ヤッタ　アリガトウ;
+setText,5,モウ　ニゲチャ　ダメダヨ;
+setText,8,……ニゲタラ/ツカマエテ　オシオキダヨ……;
+wait,20;
+setText,5,ウフフッ;
+setText,3,キャハハハハハハッ;
+setText,5,ヤクソク　ダヨ　トオシテ　アゲル;
+setText,5,ジャアネ　バイバイ……　キヒヒッ;
+itemlost,11;
+setFlag,183,1;
+playSE,unlock;
+changeImage,4,15,MapChip2_01;
+
+end;

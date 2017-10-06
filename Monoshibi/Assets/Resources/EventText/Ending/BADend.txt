@@ -1,0 +1,63 @@
+﻿size 2;
+flag,932,1;
+once,0;
+
+size 53;
+playerMove,down,3,6;
+playerMove,down,2,3;
+wait,60;
+playerMove,up,0,1;
+wait,120;
+setTextColor,0,0,0,1;
+setText,2,だれかいるの！？;
+playerMove,down,0,1;
+wait,60;
+setText,4,あっ……あなた……あなたは……！;
+cameraMove,down,1,3;
+setCameraChase,0;
+wait,30;
+setAnimState,0,animState,int,1;
+playerNoWaitMove,down,3,4;
+objectMove,0,up,3,4;
+wait,100;
+setAnimState,0,animState,int,2;
+wait,30;
+setText,2,無事だったのね！;
+setText,4,よかった……本当によかった……！;
+setText,3,もう、心配ばかりかけて……;
+setText,3,悪い子なんだから……;
+
+BGMStop,BGM,60;
+wait,100;
+setAnimState,1,animState,int,1;
+wait,60;
+setAnimState,2,animState,int,1;
+wait,30;
+setAnimState,3,animState,int,1;
+wait,10;
+setAnimState,4,animState,int,1;
+setTextColor,1,0,0,1;
+setText,8,アなタは大切ナ……/ワたしノ子供ナんだカラ……;
+wait,10;
+setAnimState,5,animState,int,1;
+
+
+fadeColor,0,0,0,1.0;
+fadeOut,30;
+wait,60;
+setTextDest,center;
+setTextColor,1,0,0,1;
+setText,8,モう　二度ト　離サナいかラ……;
+setText,10,コれかラハ　ずっト……;
+wait,20;
+setText,20,ズット　一緒ヨ……;
+wait,30;
+endImage,badend;
+wait,30;
+fadeIn,30;
+wait,200;
+fadeOut,30;
+wait,30;
+clear;
+
+end;

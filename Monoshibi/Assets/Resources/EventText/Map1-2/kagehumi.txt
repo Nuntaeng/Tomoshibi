@@ -3,8 +3,9 @@ flag,1,1;
 once,0;
 nonIdle:
 
-size 2;
-changeImage,5,13,MapChip24;
+size 3;
+changeImage,10,15,MapChip25;
 setFlag,150,1;
+play3DSE,10,15,blood,1;
 
 end;

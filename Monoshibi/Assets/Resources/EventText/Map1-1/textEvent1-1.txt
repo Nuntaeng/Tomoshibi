@@ -1,0 +1,14 @@
+﻿size 1;
+check,9,19;
+
+size 8;
+setTextColor,0.89,0.89,0.87,1;
+setText,2,なにかひっかいたようなあとがある……;
+setText,2,よくみると文章のようだ;
+wait,5;
+setText,5,『くらいよ……こわいよ……;
+setText,5,あんなの……おかあさんじゃないよ……;
+setText,5,おかあさん……ぼくのおかあさん……;
+setText,5,どこにいるの……？』;
+
+end;

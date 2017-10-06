@@ -1,11 +1,34 @@
-﻿size 2;
+﻿size 3;
+check,30,5;
+once,0;
+item,8,0;
 
-size ;
-setTextColor,1,1,1,1;
-setText,10,ほら　見て……この子、笑ったわ;
-setText,10,ふふ、これがお気に入りなのかしら;
-setText,10,かわいいわね……;
+size 26;
+setTextColor,0.89,0.89,0.87,1.0;
+setText,2,引き出しに何か入っている;
+setText,2,太鼓のおもちゃだ;
+setText,3,頭の中にあたたかい気持ちが溢れてくる……;
+BGMFadeChange,BGM,Kaisou,60,0;
+BGMStop,DetectSE,10;
+BGMStop,ChaseSE,10;
+fadeColor,0.84,0.82,0.74;
+fadeOut,100;
+setTextDest,center;
+setTextFont,OradanoGSRR;
+setTextColor,0.89,0.89,0.87,1.0;
+wait,100;
+setText,5,ほら　見て……/この子、笑ったわ;
+setText,5,ふふ、これがお気に入りなのかしら/かわいいわね……;
 wait,5;
-
+setText,5,神隠しなんて、/物騒なこともあるけれど……;
+setText,5,この子は私が、/かならず守って見せるわ……;
+wait,10;
+setText,10,生まれてきてくれて……/ありがとう;
+fadeIn,120;
+wait,120;
+setTextDest,bottom;
+setText,1,でんでん太鼓を手に入れた;
+itemget,8;
+BGMFadeChange,BGM,BGM2,60,1;
 
 end;

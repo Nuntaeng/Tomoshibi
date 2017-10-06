@@ -1,0 +1,15 @@
+﻿size 3;
+item,1,1;
+once,0;
+flag,0,0;
+
+size 7;
+setPlayerLight,1;
+changeImage,27,23,MapChip05;
+setLight,0,24,27,0, 0,0,0,0, 0,0,0,0;
+BGMStart,BGM,30,BGM1;
+BGMChange,DetectSE,Detect1;
+BGMChange,ChaseSE,Chase1;
+fadeIn,30;
+
+end;

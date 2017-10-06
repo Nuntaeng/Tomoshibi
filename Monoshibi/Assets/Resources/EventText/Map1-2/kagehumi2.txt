@@ -1,12 +1,13 @@
 ﻿size 4;
 flag,150,1;
-position,5,13;
+position,10,15;
 once,0;
 nonIdle;
 
-size 3;
-changeImage,9,14,MapChip24;
+size 4;
+changeImage,11,18,MapChip25;
+play3DSE,11,18,blood,1;
 setFlag,151,1;
-changeImage,5,13,MapChip01;
+changeImage,10,15,MapChip01;
 
 end;

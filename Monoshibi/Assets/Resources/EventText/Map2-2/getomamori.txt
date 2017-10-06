@@ -1,0 +1,35 @@
+﻿size 4;
+flag,230,1;
+check,12,6;
+once,0;
+item,4,0;
+
+size 26;
+setTextColor,0.89,0.89,0.87,1.0;
+setText,2,本の端からなにか飛び出している;
+setText,3,見覚えのあるおまもりが出てきた……;
+BGMFadeChange,BGM,Kaisou,60,0;
+BGMStop,DetectSE,10;
+fadeColor,0.84,0.82,0.74;
+fadeOut,100;
+setTextDest,center;
+setTextFont,OradanoGSRR;
+setTextColor,0.89,0.89,0.87,1.0;
+wait,100;
+setText,5,この村も、/ずいぶん子供が減ってしまったわね……;
+setText,5,これも全部、あの屋敷のせい……;
+wait,5;
+setText,8,あなたは……/あなただけは……いなくならないでね……;
+wait,10;
+setText,5,これをずっと離さずに、持っていなさい;
+wait,5;
+setText,10,きっとあなたを、守ってくれるから……;
+fadeIn,120;
+wait,150;
+BGMStop,BGM,60;
+setTextDest,bottom;
+setText,1,おまもりを手に入れた;
+itemget,4;
+changeImage,12,6,MapChip2_40;
+
+end;

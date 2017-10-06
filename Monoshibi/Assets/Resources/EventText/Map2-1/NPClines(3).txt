@@ -1,0 +1,14 @@
+﻿size 1;
+check,19,18;
+
+size 8;
+setTextColor,0.89,0.89,0.87,1.0;
+setTextFont,onryou;
+setText,3,ココガ　ドコカッテ？;
+setText,3,ココハ　ミンナノ　オウチダヨ;
+setText,3,アレ……？　デモ……;
+setText,3,ボクニ　キョウダイ　イタッケ……？;
+setText,3,マァ　イッカ;
+setTextFont,OradanoGSRR;
+
+end;

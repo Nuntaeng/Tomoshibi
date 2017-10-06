@@ -1,0 +1,14 @@
+﻿size 2;
+once,0;
+item,6,1;
+
+size 7;
+changeImage,21,11,MapChip45;
+changeImage,21,10,MapChip45;
+changeImage,21,9,MapChip45;
+changeImage,21,8,MapChip45;
+changeImage,21,7,MapChip45;
+changeImage,21,6,MapChip45;
+changeImage,21,3,MapChip31;
+
+end;

@@ -53,6 +53,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4908545057846828}
   - component: {fileID: 212190038176182578}
+  - component: {fileID: 61538836911802344}
   m_Layer: 0
   m_Name: MapChip2_14
   m_TagString: Untagged
@@ -93,7 +94,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1731132068656646}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 3533.307, y: 286.9633, z: 0}
   m_LocalScale: {x: 128, y: 128, z: 1}
   m_Children:
   - {fileID: 4060044126978468}
@@ -115,6 +116,20 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
+--- !u!61 &61538836911802344
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1731132068656646}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0.003276825, y: 0}
+  serializedVersion: 2
+  m_Size: {x: 0.6266061, y: 1}
 --- !u!212 &212190038176182578
 SpriteRenderer:
   m_ObjectHideFlags: 1

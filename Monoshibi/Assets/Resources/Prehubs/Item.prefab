@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4993130764306172}
   - component: {fileID: 212740644425044700}
   - component: {fileID: 95760141064358736}
-  - component: {fileID: 114238584671080502}
   - component: {fileID: 58841670729148202}
   - component: {fileID: 114628798829180250}
   m_Layer: 0
@@ -75,25 +74,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114238584671080502
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1953458117769420}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 715b2cdb606052d41bebde00dcd302c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemName: 
-  itemID: 0
-  itemIcon: {fileID: 0}
-  itemon_hand: 0
-  itemType: 0
-  itemDesc: 
-  item_x: 0
-  item_y: 0
 --- !u!114 &114628798829180250
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -106,8 +86,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hit_item: 0
+  itemdata:
+  - itemName: 
+    itemID: 0
+    itemIcon: {fileID: 0}
+    itemon_hand: 0
+    itemType: 0
+    itemDesc: 
   itemmanager: {fileID: 0}
-  itemdata: {fileID: 0}
 --- !u!212 &212740644425044700
 SpriteRenderer:
   m_ObjectHideFlags: 1

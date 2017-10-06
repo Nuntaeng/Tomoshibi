@@ -24,6 +24,13 @@ public class SoundContainer : MonoBehaviour {
 		}
 	}
 
+	public void PlayOneShot(float volume, string name, bool isLoop) {
+		src.volume = volume;
+		src.loop = isLoop;
+		src.clip = Clips[name];
+		src.Play();
+	}
+
 	void Awake() {
 		foreach(var snd in sounds)
 			dic.Add(snd.name, snd.clip);

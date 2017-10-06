@@ -1,0 +1,13 @@
+﻿size 1;
+position,8,50;
+
+size 10;
+fadeColor,0.84,0.82,0.74;
+fadeOut,20;
+wait,30;
+BGMStop,BGM,60;
+BGMStop,DetectSE,60;
+BGMStop,ChaseSE,60;
+wait,100;
+setDark,0,0;
+ChangeMap,5;

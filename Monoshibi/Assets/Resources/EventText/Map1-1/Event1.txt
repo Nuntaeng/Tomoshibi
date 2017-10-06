@@ -1,16 +1,18 @@
-﻿size 2;
+﻿size 3;
 once,0;
-check,41,46;
+check,24,27;
+item,1,0;
 
-
-size 9;
-play3DSE,5760,-5760,nechi001,1.0;
+size 11;
 setTextDest,under;
-setTextColor, 1.0, 1.0, 1.0, 1.0;
-setText,5,ろうそくを手に入れた;
+setTextColor, 0.89,0.89,0.87, 1.0;
+setText,3,一本のろうそくが/静かに灯っている;
+setText,3,これがあれば、/暗い道も進めるかもしれない……;
+setText,1,ろうそくを手に入れた;
 setPlayerLight,1;
-setLight,0,41,46,0, 0,0,0,0, 0,0,0,0;
-changeImage,44,42,MapChip05;
+changeImage,27,23,MapChip05;
+changeImage,24,27,MapChip07;
+setLight,0,24,27,0, 0,0,0,0, 0,0,0,0;
 setFlag,0,1;
 itemget,1;
 end;

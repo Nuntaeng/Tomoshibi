@@ -15,9 +15,7 @@ public class candletop1 : MonoBehaviour {
     {
         Vector3 lossScale = transform.lossyScale;
         Vector3 localScale = transform.localScale;
-        //Debug.Log(localScale.y);
-        //Debug.Log(lossScale.y);
-        //Debug.Log(defaultScale.y);
+
         if (lossScale.y == 0)
         {
             lossScale.y = -0.01f;

@@ -1,0 +1,7 @@
+﻿size 1;
+once,0;
+
+size 2;
+uiErase;
+Endingroot;
+end;

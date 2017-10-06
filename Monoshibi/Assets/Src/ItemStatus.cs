@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]//この属性を使ってインスペクター上で表示
-public class ItemStatus : MonoBehaviour
+public class ItemStatus 
 {
     public string itemName;        //名前
     public int itemID;             //アイテムID
@@ -15,7 +15,7 @@ public class ItemStatus : MonoBehaviour
     public string itemicon; //アイテムアイコン名
     
     //ここでリスト化時に渡す引数をあてがいます   
-    public ItemStatus(string name, int id, int hand, string desc,float x,float y,int type,string icon)
+    public ItemStatus(string name, int id, int hand, string desc,int type,string icon)
     {
         itemName = name;
         itemID = id;
@@ -25,7 +25,5 @@ public class ItemStatus : MonoBehaviour
         itemType = type;
         itemon_hand = hand;
         itemDesc = desc;
-        item_x = x;
-        item_y = y;
     }
 }

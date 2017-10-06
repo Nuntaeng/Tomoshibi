@@ -7,11 +7,9 @@ using UnityEngine.UI;
     ・とりあえず必ず「条件 → 処理」の順で書く
     ・それぞれの数を示すsizeの直後の条件や処理の部分以外は別に厳密には決まってない
     ・どこぞの某言語のように分の終わりにはセミコロンを入れる
-    ・sizeの文字列で文字列を切り分けるために"："に一回文字列を置き換えてるので"："は書かないほうがたぶんいい
     ・座標指定とか指定は残念ながら画面上でクリックして座標調べるとかはできません、地道に調べましょう・・・・・・すまぬ、すまぬ
 
-    ・この手の処理にはド定番の「はい/いいえ」の分岐はまだない、考え中
-    ・まだ音と敵はいじれません、はい
+    ・この手の処理にはド定番の「はい/いいえ」の分岐はない、考え中だがたぶんやらない
 
 
     条件：
@@ -22,7 +20,8 @@ using UnityEngine.UI;
     flag, index, 0or1                       特定のフラグが立っているとき/立っていないとき (引数はフラグの番号、boolの真偽で０をfalseとし、１をtrueとする)
     once, count                             このイベントの起こった回数が一定回数以下のとき（基本的には０を指定して一回だけイベントを起こすように使う）
     check, x, y                             指定した座標のマップオブジェクトを調べたとき(あたり判定のないものは今は調べられない);
-    *item, index, count                      指定したIDのアイテムをcount分持っているかどうか
+    item, index, count                      指定したIDのアイテムをcount分持っているかどうか
+    collision, num                          observerの中にあるオブジェクトがプレイヤーとぶつかったのか
  
 
     処理：
@@ -48,12 +47,31 @@ using UnityEngine.UI;
     setEnemyMaxDetect, maxDetect                                    エネミーの最大感知度を設定、エネミーは最大感知度を現在の感知度が上回ると出現するのだ
     fadeIn, time                                                    タイムの速度でフェードイン
     fadeOut, time                                                   タイムの速度でフェードアウト
+    *fadeColor, r, g, b                                             フェード色を指定、色は０から１までの小数で指定
     ChangeMap,mapIndex                                              ゲームの実行中にマップを変更する
-    BGMStart, type, time, name                                      BGM切り替え、timeの値でフェードする。　タイプでBGMなのか、DetectSEなのか、ChaseSEなのかを入力してください。
+    BGMStart, type, time, name, loop                                BGM切り替え、timeの値でフェードする。　タイプでBGMなのか、DetectSEなのか、ChaseSEなのかを入力してください。
     BGMStop, type, time                                             BGMストップ、timeの値でフェードする。　タイプでBGMなのか、DetectSEなのか、ChaseSEなのかを入力してください。
-    BGMChange, type, time, name                                     BGMを切り替えてフェードイン＆アウトします。　タイプでBGMなのか、DetectSEなのか、ChaseSEなのかを入力してください。
+    BGMChange, type, name                                           BGMソースを切り替える。　タイプでBGMなのか、DetectSEなのか、ChaseSEなのかを入力してください。すまんなキム君、勝手に改造させてもらった。
+    BGMFadeChange, type, name, time, loop                           BGMソースを切り替える。　タイプでBGMなのか、DetectSEなのか、ChaseSEなのかを入力してください。
+    BGMChangeOneShot, type, volume, name, loop                      BGMソースを一発で切り替える。　タイプでBGMなのか、DetectSEなのか、ChaseSEなのかを入力してください。すまんなキム君、勝手に改造させてもらった。
+    quake, time, power                                              画面をtime分のフレームだけ揺らす。powerは揺らす強さ（ドット単位）
+    cameraMove, direction, distance, speed                          directionに "reset" を指定すると位置をプレイヤーに戻す。細かいところはプレイヤーのと大体は同じだが、quakeとは今のところは同時使用できない
+    setCameraPos, x, y                                              これもプレイヤーの同じ、瞬間移動でカメラの位置を変更
+    setCameraChase, bool                                            カメラがプレイヤーに追従するかどうかをboolの値で設定
+    removeCollider,idx                                              そのインデックスにあるコライダーを壊す
 
-    end:                                                            テキストの末尾には"end"と書く、ぶっちゃけ仕様上いらないけど見やすいと思うので
+    uiErase                                                         エンディング用、いらないUI等を非表示させます。
+    Endingroot                                                      エンディング用、ルート変更します。
+    endImage,name                                                   エンディングに出力する画像用,ファイル名(.pngは不要)
+
+    setAnimState, index, valueName, type, value                     Animatorで定義した変数に値を代入する、indexはspawnオブジェクトの番号、valueName が変数名、type はbool,int,floatのどれか、value が値
+    playerNoWaitMove, direction, distance, speed                    プレイヤーを移動、こっちは終わるまで待たない
+    objectMove, index, direction, distance, speed                   spawnListに登録してあるオブジェクトを移動、オブジェクトの番号を指定しているところ以外はその他のMove系と同じ
+
+    *setDark,bool,visible                                            三階層の闇の有効無効を切り替え、有効時は上から下に落ちてプレイヤーを殺す判定が出る、visibleを真の値に設定すると見える、偽で隠せる
+    *setTextSize, size                                               テキストのサイズを指定、一文字ごとにサイズ指定はできないので注意
+    *setTextFont, fontName                                           テキストに使用するフォントを名前で指定する
+    *setLightSize, size                                              プレイヤーの持つライトのサイズ保証値を書き換えるint型でどうぞ
 
     ※随時追加予定、忘れてたら言ってちょ
     　新規追加処理には今度から * をつけとく、今後の参考にでもしておくれなんし
@@ -71,6 +89,7 @@ public class EventClass : MonoBehaviour {
     //外部のクラス
     public EventManager manager;
     public TextAsset eventTxtFile;
+
 
     //このイベントがマネージャーの管理する何番目のイベントかを保持、主にマネージャーに情報を返すために使う
     [HideInInspector]
@@ -113,7 +132,7 @@ public class EventClass : MonoBehaviour {
 
     public void Run()
     {
-        //Enableがfalseならイベントを無効にできる
+        //Enableがfalseならイベントを無効にできる、また、ほかのイベント中はイベントが起こらない（eventStateが-1の時イベントはフリー）
         if (!manager.eventStatus[eventNumber].eventEnable || (manager.eventState != eventNumber && manager.eventState >= 0))
         {
             return;
@@ -124,8 +143,11 @@ public class EventClass : MonoBehaviour {
         {
             //アニメーションを止める（正確には待機アニメーションへ移行）
             Animator animator = manager.player.GetComponent<Animator>();
-            animator.SetFloat("Player_Input_Y", 0.0f);
-            animator.SetFloat("Player_Input_X", 0.0f);
+            if (eventCount == 0)
+            {
+                animator.SetFloat("Player_Input_Y", 0.0f);
+                animator.SetFloat("Player_Input_X", 0.0f);
+            }
 
             textDest.text = "";
             StartEvent(eventCount);
@@ -223,9 +245,11 @@ public class EventClass : MonoBehaviour {
         int checkX = -1;
         int checkY = -1;
 
+        //フラグ999（ゲームオーバーイベント）を用いたイベントであったか
+        bool isGameOverEvent = false;
+
         for (int i = 0; i < checkData.Length; ++i)
         {
-
             //インデックスによって処理を判断
             switch ((EventIndex)checkData[i][0])
             {
@@ -249,6 +273,10 @@ public class EventClass : MonoBehaviour {
                     if ((manager.flag.flag[checkData[i][1]] && checkData[i][2] == 0) || (!manager.flag.flag[checkData[i][1]] && checkData[i][2] == 1))
                     {
                         return false;
+                    }
+                    if(checkData[i][1] == 999)
+                    {
+                        isGameOverEvent = true;
                     }
                     break;
 
@@ -276,10 +304,26 @@ public class EventClass : MonoBehaviour {
                     //manager.mapObj[checkY, checkX].tag = "Untagged";
                     break;
 
+                case EventIndex.EVENT_IF_COLLIDE:
+                    if (manager.collideObservers.Count <= 0)
+                        return false;
+                    foreach (var obj in manager.collideObservers) {
+                        if (obj.Key == checkData[i][1]) {
+                            if (!manager.playerCheck.IsPushing ||
+                                !obj.Value.name.Equals(manager.playerCheck.currentObjName)) 
+                                    return false;
+                            Debug.Log(obj.Value.name + " = " + manager.playerCheck.currentObjName);
+                        }
+                    }
+                    break;
+
+
                 //文字列がデータにないやつだったらとりあえずfalse返しとく
                 default:
                     return false;
             }
+
+
         }
 
         //調べるコマンドが存在して、かつ調べられる条件を満たすときにそのマスのタグをMapobjectへ
@@ -296,6 +340,13 @@ public class EventClass : MonoBehaviour {
             Debug.Log("");
             manager.mapObj[checkY, checkX].tag = "Untagged";
             manager.status.checkPos = new Vector2(-100.0f, -100.0f);
+        }
+
+        //プレイヤーが死んでいて、ゲームオーバーイベントでないときはfalseでイベントも止めちゃう
+        if (manager.prevState == PlayerState.Dead && !isGameOverEvent)
+        {
+            eventCount = 0;
+            return false;
         }
 
         return true;
@@ -334,10 +385,36 @@ public class EventClass : MonoBehaviour {
                     int distance = int.Parse(text[2]);
                     int speed = int.Parse(text[3]);
 
-                    StartCoroutine(manager.func.PlayerMove((r) => eventState = r, manager.player, new Vector2(x, y), distance, speed));
+                    StartCoroutine(manager.func.PlayerMove((r) => eventState = r, manager.player, new Vector2(x, y), distance, speed, 0));
                     break;
                 }
+            //"playerNoWaitMove"処理
+            case EventIndex.EVENT_FUNC_PLAYERNOWAITMOVE:
+                {
+                    int x = 0, y = 0;
+                    if (text[1] == "up")
+                    {
+                        y = -1;
+                    }
+                    else if (text[1] == "down")
+                    {
+                        y = 1;
+                    }
+                    else if (text[1] == "left")
+                    {
+                        x = -1;
+                    }
+                    else if (text[1] == "right")
+                    {
+                        x = 1;
+                    }
 
+                    int distance = int.Parse(text[2]);
+                    int speed = int.Parse(text[3]);
+
+                    StartCoroutine(manager.func.PlayerMove((r) => eventState = r, manager.player, new Vector2(x, y), distance, speed, 1));
+                    break;
+                }
             //"setPlayerPos"処理
             case EventIndex.EVENT_FUNC_PLAYERSETPOSITION:
                 {
@@ -347,6 +424,7 @@ public class EventClass : MonoBehaviour {
                     status.posX = x;
                     status.posY = y;
                     manager.player.transform.position = new Vector3(status.posX * 128.0f, -status.posY * 128.0f, (status.posY - 64.0f) / 128.0f);
+                    manager.cameraScr.transform.position = manager.player.transform.position;
                     break;
                 }
 
@@ -389,7 +467,6 @@ public class EventClass : MonoBehaviour {
                     //ファイルのパスを指定する（フォルダ名はMap + 階層数）
                     text[3] = "Map" + (manager.map.GetComponent<MapScriptTMX>().usedMapIndex + 1).ToString() + "/" + text[3];
                     manager.mapObj[y, x] = manager.func.ChangeImage(manager.mapObj[y, x], text[3]);
-
                     break;
                 }
 
@@ -479,9 +556,21 @@ public class EventClass : MonoBehaviour {
                     GameObject im = manager.itemmanager;
                     ItemManager m = im.GetComponent<ItemManager>();
                     m.itemData[int.Parse(text[1])].itemon_hand = 1;
-                    GameObject icon = manager.itembox;
-                    itemlist item_icon = icon.GetComponent<itemlist>();
-                    item_icon.itemget(int.Parse(text[1]));
+                    if (m.itemData[int.Parse(text[1])].itemType == 2 && m.itemData[int.Parse(text[1])].itemID != 1)
+                    {
+                        GameObject Im_icon = manager.Importancebox;
+                        Importancelist im_icon = Im_icon.GetComponent<Importancelist>();
+                        im_icon.itemget(int.Parse(text[1]));
+                    }
+                    else
+                    {
+                        GameObject icon = manager.itembox;
+                        itemlist item_icon = icon.GetComponent<itemlist>();
+                        item_icon.itemget(int.Parse(text[1]));
+                    }
+                    Itemsavedata s = im.GetComponent<Itemsavedata>();
+                    s.itemsaved(int.Parse(text[1]), m.itemData[int.Parse(text[1])].itemon_hand, m.itemData[int.Parse(text[1])].itemType);
+                    
                     break;
                 }
             //"itemlost"処理
@@ -490,22 +579,28 @@ public class EventClass : MonoBehaviour {
                     GameObject icon = manager.itembox;
                     itemlist item_icon = icon.GetComponent<itemlist>();
                     item_icon.itemlost(int.Parse(text[1]));
+                    manager.itemmanager.GetComponent<ItemManager>().itemData[int.Parse(text[1])].itemon_hand = 0;
                     break;
                 }
 
             //"createEnemy"処理
             case EventIndex.EVENT_FUNC_ENEMYDETECTED:
                 {
+                    //createって書いてあるのになぜか消去もやってるんだが・・・過去の俺よ・・・てめえ・・・・・・
                     if(int.Parse(text[1]) == 0)
                     {
                         manager.enemyClass.enable = false;
+                        manager.func.SoundFadeOut(manager.DetectSE.src, 30);
+                        manager.func.SoundFadeOut(manager.ChaseSE.src, 30);
                         manager.enemyClass.KillEnemy();
                     }
                     else
                     {
                         manager.enemyClass.enable = true;
                     }
-                    manager.enemyClass.detectCount = 0;
+                    manager.status.detectCount = 1;
+                    //manager.enemyClass.detectCount = 1;
+                    manager.enemyClass.ChasePoint = 0;
 
                     break;
                 }
@@ -527,6 +622,12 @@ public class EventClass : MonoBehaviour {
                     manager.fade.FadeOut(int.Parse(text[1]));
                     break;
                 }
+            //"fadeColor"処理
+            case EventIndex.EVENT_FUNC_FADECOLOR:
+                {
+                    manager.fade.render.color = new Color(float.Parse(text[1]), float.Parse(text[2]), float.Parse(text[3]), manager.fade.render.color.a);
+                    break;
+                }
             //"ChangeMap"処理
             case EventIndex.EVENT_FUNC_CHANGEMAP: 
                 {
@@ -544,14 +645,20 @@ public class EventClass : MonoBehaviour {
                     switch (text[1]) {
                         case "BGM":             
                             manager.BGM.src.clip = manager.BGM.Clips[text[3]];
+                            try { manager.BGM.src.loop = (int.Parse(text[4]) > 0 ? true : false); }
+                            catch (System.IndexOutOfRangeException e) { manager.BGM.src.loop = true; }
                             src = manager.BGM.src;  
                             break;                        
                         case "DetectSE":        
                             manager.DetectSE.src.clip = manager.DetectSE.Clips[text[3]];
+                            try { manager.DetectSE.src.loop = (int.Parse(text[4]) > 0 ? true : false); }
+                            catch (System.IndexOutOfRangeException e) { manager.DetectSE.src.loop = true; }
                             src = manager.DetectSE.src;  
                             break;                        
                         case "ChaseSE":         
                             manager.ChaseSE.src.clip = manager.ChaseSE.Clips[text[3]];
+                            try { manager.ChaseSE.src.loop = (int.Parse(text[4]) > 0 ? true : false); }
+                            catch (System.IndexOutOfRangeException e) { manager.ChaseSE.src.loop = true; }
                             src = manager.ChaseSE.src;  
                             break;         
                         default: Debug.LogError("Scripting Error on BGMSTART"); break;               
@@ -562,7 +669,7 @@ public class EventClass : MonoBehaviour {
 
                     break;
                 }
-                //"BGMStop"処理
+            //"BGMStop"処理
             case EventIndex.EVENT_FUNC_BGMSTOP:
                 {
                     switch (text[1]) {
@@ -573,18 +680,266 @@ public class EventClass : MonoBehaviour {
                     }
                     break;
                 }
-                //"BGMChange"処理
+            //"BGMChange"処理
             case EventIndex.EVENT_FUNC_BGMCHANGE:
                 {
                     switch (text[1]) {
-                        case "BGM":         manager.func.SoundChagne(manager.BGM.src, manager.BGM.Clips[text[3]], int.Parse(text[2]));  break;                        
-                        case "DetectSE":    manager.func.SoundChagne(manager.DetectSE.src, manager.DetectSE.Clips[text[3]], int.Parse(text[2]));  break; 
-                        case "ChaseSE":     manager.func.SoundChagne(manager.ChaseSE.src, manager.ChaseSE.Clips[text[3]], int.Parse(text[2]));  break; 
+                        case "BGM":         manager.func.SoundChagne(manager.BGM.src, manager.BGM.Clips[text[2]]);  break;                        
+                        case "DetectSE":    manager.func.SoundChagne(manager.DetectSE.src, manager.DetectSE.Clips[text[2]]);  break; 
+                        case "ChaseSE":     manager.func.SoundChagne(manager.ChaseSE.src, manager.ChaseSE.Clips[text[2]]);  break; 
                         default: Debug.LogError("Scripting Error on BGMCHANGE"); break;               
                     }
                     break;
                 }
+            //"BGMFadeChange"処理 type name time loop
+            case EventIndex.EVENT_FUNC_BGMFADECHANGE:
+                {
+                    bool isLoop = true;
+                    if (text.Length >= 5)
+                        isLoop = int.Parse(text[4]) > 0 ? true : false;
+                    switch (text[1]) {
+                        case "BGM":         manager.func.SoundChangeFade(manager.BGM.src, manager.BGM.Clips[text[2]], int.Parse(text[3]), isLoop);  break;                        
+                        case "DetectSE":    manager.func.SoundChangeFade(manager.DetectSE.src, manager.DetectSE.Clips[text[2]], int.Parse(text[3]), isLoop);  break; 
+                        case "ChaseSE":     manager.func.SoundChangeFade(manager.ChaseSE.src, manager.ChaseSE.Clips[text[2]], int.Parse(text[3]), isLoop);  break; 
+                        default: Debug.LogError("Scripting Error on BGMCHANGE"); break;               
+                    }
+                    break;
+                }
+            //"BGMChangeOneShot"処理
+            case EventIndex.EVENT_FUNC_BGMCHANGEONESHOT:
+                {
+                    switch (text[1]) {
+                        case "BGM":         manager.BGM.PlayOneShot(float.Parse(text[2]), text[3], int.Parse(text[4]) > 0 ? true : false); break;
+                        case "DetectSE":    manager.DetectSE.PlayOneShot(float.Parse(text[2]), text[3], int.Parse(text[4]) > 0 ? true : false); break;
+                        case "ChaseSE":     manager.ChaseSE.PlayOneShot(float.Parse(text[2]), text[3], int.Parse(text[4]) > 0 ? true : false); break;
+                        default: Debug.LogError("Scripting Error on BGMCHANGE"); break;               
+                    }
+                    break;
+                }
+            //quake"処理
+            case EventIndex.EVENT_FUNC_QUAKE:
+                {
+                    manager.cameraScr.Quake(int.Parse(text[1]), int.Parse(text[2]));
+                    break;
+                }
 
+            //"setDark"処理
+            case EventIndex.EVENT_FUNC_SETDARK:
+                {
+                    //有効無効
+                    if (int.Parse(text[1]) == 0)
+                    {
+                        manager.Darks.enable = false;
+                    } else
+                    {
+                        manager.Darks.enable = true;
+                    }
+
+                    //表示
+                    if (int.Parse(text[2]) == 0)
+                    {
+                        manager.Darks.gameObject.SetActive(false);
+                    }else
+                    {
+                        manager.Darks.gameObject.SetActive(true);
+                    }
+                    break;
+                }
+            //"uiErase"処理
+            case EventIndex.EVENT_FUNC_UIERASE:
+                {
+                    manager.UI.GetComponent<Canvas>().enabled = false;
+                    manager.maskerase.mask_display(false);
+                    manager.lighterase.Light_display(false);
+                    Debug.Log("UI");
+                    break;
+                }
+            //"Endingroot"処理
+            case EventIndex.EVENT_FUNC_ENDROOT:
+                {
+                    GameObject m = manager.itemmanager;
+                    ItemManager im = m.GetComponent<ItemManager>();
+                    int STitem, Total;
+                    STitem = 0;
+                    Total = 0;
+                    for(int check = 0; check < im.itemData.Length; ++check)//アイテムの数だけループ
+                    {
+                        if (im.itemData[check].itemID != 1) {//蝋燭を除外
+                            if (im.itemData[check].itemType == 2)//ストーリーアイテムを選別
+                            {
+                                if (im.itemData[check].itemon_hand >= 1)//手持ち数が１以上のものを選別
+                                {
+                                    STitem++;
+                                }
+                            }
+                        }
+                    }
+                    if (2 == STitem)
+                    {
+                        Total = 931;//Normal
+                    }
+                    else if (0 <= STitem && 1 >= STitem)
+                    {
+                        Total = 932;//Bad
+                    }
+                    else
+                    {
+                        Total = 930;//True
+                    }
+                    int setIndex = Total;
+                    int set = 1;
+                    if (set == 0)
+                    {
+                        manager.flag.flag[setIndex] = false;
+                    }
+                    else
+                    {
+                        manager.flag.flag[setIndex] = true;
+                    }
+                    break;
+                }
+            //"endImage"処理
+            case EventIndex.EVENT_FUNC_BACKIMAGE:
+                {
+                    manager.endimage.endImage(text[1]);
+                    break;
+                }
+            //"clear"処理
+            case EventIndex.EVENT_FUNC_CLEAR:
+                {
+                    manager.gameclear.gameclear();
+                    break;
+                }
+            //"cameraMove"処理
+            case EventIndex.EVENT_FUNC_MOVECAMERA:
+                {
+                    int x = 0, y = 0;
+                    if (text[1] == "up")
+                    {
+                        y = -1;
+                    }
+                    else if (text[1] == "down")
+                    {
+                        y = 1;
+                    }
+                    else if (text[1] == "left")
+                    {
+                        x = -1;
+                    }
+                    else if (text[1] == "right")
+                    {
+                        x = 1;
+                    }
+
+                    int distance = int.Parse(text[2]);
+                    int speed = int.Parse(text[3]);
+
+                    StartCoroutine(manager.func.CameraMove((r) => eventState = r, manager.cameraScr, new Vector2(x, y), distance, speed));
+                    break;
+                }
+
+            //"setCameraPos"処理
+            case EventIndex.EVENT_FUNC_SETCAMERAPOS:
+                {
+                    int x = int.Parse(text[1]);
+                    int y = int.Parse(text[2]);
+                    manager.cameraScr.cameraPos = new Vector3(x * 128.0f, -y * 128.0f, (y - 64.0f) / 128.0f - 100.0f);
+                    manager.cameraScr.shiftCount = Vector3.zero;
+                    break;
+                }
+            //"setCameraChase"処理
+            case EventIndex.EVENT_FUNC_SETCAMERACHASE:
+                {
+                    if (int.Parse(text[1]) == 0)
+                    {
+                        manager.cameraScr.isPlayerChase = false;
+                    }else
+                    {
+                        manager.cameraScr.isPlayerChase = true;
+                    }
+                    break;
+                }
+
+            //"destroyCollider"処理
+            case EventIndex.EVENT_FUNC_REMOVECOLLIDER:
+                {
+                    Debug.Log("Destroy Object = " + text[1]);
+                    manager.collideObservers[int.Parse(text[1])].gameObject.SetActive(false);
+                    break;   
+                }
+
+            //"setAnimState"処理
+            case EventIndex.EVENT_FUNC_SETANIMSTATE:
+                {
+                    int objIndex = int.Parse(text[1]);
+                    string valueName = text[2];
+                    string typeName = text[3];
+                    //SpawnListのobjIndex番目のアニメーターを獲得
+                    Animator animator = manager.map.GetComponent<SpawnManager>().objList[objIndex].GetComponent<Animator>();
+                    Debug.Log(manager.map.GetComponent<SpawnManager>().objList[objIndex]);
+
+                    if(typeName == "int")
+                    {
+                        animator.SetInteger(valueName, int.Parse(text[4]));
+                    }
+                    if(typeName == "bool")
+                    {
+                        if (int.Parse(text[4]) == 0) animator.SetBool(valueName, false);
+                        else
+                            animator.SetBool(valueName, true);
+                    }
+                    if (typeName == "float")
+                    {
+                        animator.SetFloat(valueName, float.Parse(text[4]));
+                    }
+                    break;
+                }
+            //"ObjectMove"処理
+            case EventIndex.EVENT_FUNC_OBJECTMOVE:
+                {
+                    int objIndex = int.Parse(text[1]);
+                    int x = 0, y = 0;
+                    if (text[2] == "up")
+                    {
+                        y = -1;
+                    }
+                    else if (text[2] == "down")
+                    {
+                        y = 1;
+                    }
+                    else if (text[2] == "left")
+                    {
+                        x = -1;
+                    }
+                    else if (text[2] == "right")
+                    {
+                        x = 1;
+                    }
+
+                    int distance = int.Parse(text[3]);
+                    int speed = int.Parse(text[4]);
+
+                    StartCoroutine(manager.func.ObjMove((r) => eventState = r, manager.map.GetComponent<SpawnManager>().objList[objIndex], new Vector2(x, y), distance, speed));
+                    break;
+                }
+            //"setTextSize"処理
+            case EventIndex.EVENT_FUNC_SETTEXTSIZE:
+                {
+                    textDest.fontSize = int.Parse(text[1]);
+                    break;
+                }
+            //"setTextFont"処理
+            case EventIndex.EVENT_FUNC_SETTEXTFONT:
+                {
+                    textDest.font = (Font)Resources.Load("Font/" + text[1]);
+                    break;
+                }
+            //"setLightSize"処理
+            case EventIndex.EVENT_FUNC_SETLIGHTMINSIZE:
+                {
+                    manager.status.minLightCircle = int.Parse(text[1]);
+                    break;
+                }
             default:
                 return;
         }

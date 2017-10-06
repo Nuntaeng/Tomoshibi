@@ -5,8 +5,11 @@ using UnityEngine;
 
 public class MapScript : MonoBehaviour
 {
+
+
     public GameObject prehub_Item;
     public int[] useMapChip;
+    public SpawnManager spawnManager;
     MapScriptTMX tmxLoader;
 
 
@@ -18,7 +21,7 @@ public class MapScript : MonoBehaviour
     {
         tmxLoader = GetComponent<MapScriptTMX>();
         
-        ChangeMap(tmxLoader.mapNumber);
+        ChangeMap(MapScriptTMX.savedMapNumber);
 
         // map1 = tmxLoader.Map;
         // obj = tmxLoader.MapObject;
@@ -82,9 +85,11 @@ public class MapScript : MonoBehaviour
     public void ChangeMap(int mapNumber) {
         tmxLoader.ClearMap();
         tmxLoader.mapNumber = mapNumber;
+        MapScriptTMX.savedMapNumber = mapNumber;
         tmxLoader.usedMapIndex = useMapChip[mapNumber];
         tmxLoader.LoadMapFromTMXFile();
         tmxLoader.PrintCurrentMap();
+        spawnManager.MapChange(mapNumber);
 
         map1 = tmxLoader.Map;
         obj = tmxLoader.MapObject;

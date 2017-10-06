@@ -1,0 +1,11 @@
+size 2;
+collision,0;
+flag,182,1;
+
+size 4;
+setTextColor,0.89,0.89,0.87,1;
+setText,1,竹とんぼを手に入れた;
+itemget,11;
+removeCollider,0;
+
+end;
